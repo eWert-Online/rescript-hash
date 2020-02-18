@@ -3,8 +3,12 @@
   "description": "Secure Hash Algorithms for ReasonML",
   "version": "0.1.1",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watchAll"
+    "prepare": "npm run test && npm run build",
+    "build": "bsb -clean-world && bsb -make-world",
+    "start": "bsb -clean-world && bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "bsb -clean-world && bsb -make-world && jest",
+    "test:watch": "bsb -clean-world && bsb -make-world && jest --watchAll"
   },
   "homepage": "https://github.com/eWert-Online/re-crypt#readme",
   "bugs": "https://github.com/eWert-Online/re-crypt/issues",
