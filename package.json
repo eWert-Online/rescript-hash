@@ -3,9 +3,8 @@
   "description": "Secure Hash Algorithms for ReasonML",
   "version": "0.1.1",
   "scripts": {
-    "build": "bsb -make-world",
-    "start": "bsb -make-world -w",
-    "clean": "bsb -clean-world"
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
   "homepage": "https://github.com/eWert-Online/re-crypt#readme",
   "bugs": "https://github.com/eWert-Online/re-crypt/issues",
@@ -24,6 +23,8 @@
   "author": "Torben Ewert",
   "license": "MIT",
   "devDependencies": {
-    "bs-platform": "^7.0.1"
+    "@glennsl/bs-jest": "^0.4.9",
+    "bs-platform": "^7.0.1",
+    "jest": "^25.1.0"
   }
 }
