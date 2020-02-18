@@ -1,0 +1,1 @@
+module Sha512 = ReCrypt_Sha512;

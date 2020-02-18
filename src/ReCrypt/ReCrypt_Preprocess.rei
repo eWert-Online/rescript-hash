@@ -1,0 +1,1 @@
+module Sha512: {let pad: Bytes.t => bytes;};
