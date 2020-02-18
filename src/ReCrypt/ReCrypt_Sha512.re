@@ -31,9 +31,9 @@ let processMessage = (message: Bytes.t) => {
 
     for (t in 16 to 79) {
       w[t] =
-        ReCrypt_Functions.Sha512.sigma1(w[t - 2])
+        ReCrypt_Functions.Sha384_512.sigma1(w[t - 2])
         ->Int64.add(w[t - 7])
-        ->Int64.add(ReCrypt_Functions.Sha512.sigma0(w[t - 15]))
+        ->Int64.add(ReCrypt_Functions.Sha384_512.sigma0(w[t - 15]))
         ->Int64.add(w[t - 16]);
     };
 
@@ -49,15 +49,15 @@ let processMessage = (message: Bytes.t) => {
     for (t in 0 to 79) {
       let temp1 =
         (h^)
-        ->Int64.add(ReCrypt_Functions.Sha512.sum1(e^))
-        ->Int64.add(ReCrypt_Functions.change(e^, f^, g^))
+        ->Int64.add(ReCrypt_Functions.Sha384_512.sum1(e^))
+        ->Int64.add(ReCrypt_Functions.Sha384_512.change(e^, f^, g^))
         ->Int64.add(ReCrypt_Constants.sha512[t])
         ->Int64.add(w[t]);
 
       let temp2 =
         Int64.add(
-          ReCrypt_Functions.Sha512.sum0(a^),
-          ReCrypt_Functions.majority(a^, b^, c^),
+          ReCrypt_Functions.Sha384_512.sum0(a^),
+          ReCrypt_Functions.Sha384_512.majority(a^, b^, c^),
         );
 
       h := g^;
