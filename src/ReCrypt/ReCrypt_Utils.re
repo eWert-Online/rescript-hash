@@ -13,13 +13,26 @@ let int64_of_bytes = (input, j) => {
   v^;
 };
 
+let toBytes = (value, bytes) => {
+  let va = ref(value);
+  for (i in 1 to 15) {
+    Bytes.set(
+      bytes,
+      Bytes.length(bytes) - i,
+      Char.chr(va^ land 0x000000FF),
+    );
+    va := va^ asr 8;
+  };
+  bytes;
+};
+
 let append = (hash, value, offset) => {
   for (j in 0 to 7) {
     Bytes.set(
       hash,
       j + offset,
       Int64.shift_right_logical(value, 56 - j * 8)
-      ->Int64.logand(Int64.of_int(0xFF))
+      ->Int64.logand(0xFFL)
       ->Int64.to_int
       ->Char.chr,
     );
