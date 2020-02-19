@@ -54,7 +54,7 @@ _Not yet implemented_
 ### SHA512
 
 ```
-let hash = Sha512.make("unicorn");
+let hash = ReCrypt.Sha512.make("unicorn");
 ```
 
 produces the following hash:
