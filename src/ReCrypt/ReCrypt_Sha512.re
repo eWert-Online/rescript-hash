@@ -1,13 +1,13 @@
 /* constants [§4.2.3] */
 let initialHash = [|
-  Int64.of_string("0x6a09e667f3bcc908"),
-  Int64.of_string("0xbb67ae8584caa73b"),
-  Int64.of_string("0x3c6ef372fe94f82b"),
-  Int64.of_string("0xa54ff53a5f1d36f1"),
-  Int64.of_string("0x510e527fade682d1"),
-  Int64.of_string("0x9b05688c2b3e6c1f"),
-  Int64.of_string("0x1f83d9abfb41bd6b"),
-  Int64.of_string("0x5be0cd19137e2179"),
+  0x6a09e667f3bcc908L,
+  0xbb67ae8584caa73bL,
+  0x3c6ef372fe94f82bL,
+  0xa54ff53a5f1d36f1L,
+  0x510e527fade682d1L,
+  0x9b05688c2b3e6c1fL,
+  0x1f83d9abfb41bd6bL,
+  0x5be0cd19137e2179L,
 |];
 
 let processMessage = (message: Bytes.t) => {
