@@ -5,7 +5,11 @@ let int64_of_bytes: (bytes, int) => int64;
 
 /**
  */
-let append: (bytes, int64, int) => unit;
+let append32: (bytes, int32, int) => unit;
+
+/**
+ */
+let append64: (bytes, int64, int) => unit;
 
 /**
  */

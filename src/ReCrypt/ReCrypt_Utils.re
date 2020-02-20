@@ -26,7 +26,20 @@ let toBytes = (value, bytes) => {
   bytes;
 };
 
-let append = (hash, value, offset) => {
+let append32 = (hash, value, offset) => {
+  for (j in 0 to 3) {
+    Bytes.set(
+      hash,
+      j + offset,
+      Int32.shift_right_logical(value, 24 - j * 8)
+      ->Int32.logand(0xFFl)
+      ->Int32.to_int
+      ->Char.chr,
+    );
+  };
+};
+
+let append64 = (hash, value, offset) => {
   for (j in 0 to 7) {
     Bytes.set(
       hash,

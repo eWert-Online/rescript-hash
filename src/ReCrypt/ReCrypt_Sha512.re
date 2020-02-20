@@ -81,14 +81,14 @@ let processMessage = (message: Bytes.t) => {
   };
 
   let sha512raw = Bytes.make(64, Char.chr(0));
-  ReCrypt_Utils.append(sha512raw, a^, 0);
-  ReCrypt_Utils.append(sha512raw, b^, 8);
-  ReCrypt_Utils.append(sha512raw, c^, 16);
-  ReCrypt_Utils.append(sha512raw, d^, 24);
-  ReCrypt_Utils.append(sha512raw, e^, 32);
-  ReCrypt_Utils.append(sha512raw, f^, 40);
-  ReCrypt_Utils.append(sha512raw, g^, 48);
-  ReCrypt_Utils.append(sha512raw, h^, 56);
+  ReCrypt_Utils.append64(sha512raw, a^, 0);
+  ReCrypt_Utils.append64(sha512raw, b^, 8);
+  ReCrypt_Utils.append64(sha512raw, c^, 16);
+  ReCrypt_Utils.append64(sha512raw, d^, 24);
+  ReCrypt_Utils.append64(sha512raw, e^, 32);
+  ReCrypt_Utils.append64(sha512raw, f^, 40);
+  ReCrypt_Utils.append64(sha512raw, g^, 48);
+  ReCrypt_Utils.append64(sha512raw, h^, 56);
 
   Bytes.to_string(sha512raw)->ReCrypt_Utils.stringToHex;
 };

@@ -1,1 +1,7 @@
-module Sha512 = ReCrypt_Sha512;
+module Sha256 = {
+  include ReCrypt_Sha256;
+};
+
+module Sha512 = {
+  include ReCrypt_Sha512;
+};
