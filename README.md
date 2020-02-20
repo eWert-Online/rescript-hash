@@ -45,7 +45,7 @@ _Not yet implemented_
 
 ### SHA256
 
-```
+```reason
 let hash = ReCrypt.Sha256.make("unicorn");
 ```
 
@@ -61,7 +61,7 @@ _Not yet implemented_
 
 ### SHA512
 
-```
+```reason
 let hash = ReCrypt.Sha512.make("unicorn");
 ```
 
