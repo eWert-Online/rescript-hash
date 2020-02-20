@@ -3,7 +3,7 @@
   */
 module Sha512 = {
   let pad = (msgBytes: Bytes.t) => {
-    let size = ref(Bytes.length(msgBytes) + 16);
+    let size = ref(Bytes.length(msgBytes) + 16 + 1);
     while (size^ mod 128 != 0) {
       size := size^ + 1;
     };
