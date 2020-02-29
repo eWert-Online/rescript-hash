@@ -10,7 +10,7 @@ Secure Hash Algorithms implemented in ReasonML based on
 - [ ] SHA-1
 - [ ] SHA224
 - [x] SHA256
-- [ ] SHA-384
+- [x] SHA-384
 - [x] SHA512
 
 # How do I install it?
@@ -57,7 +57,15 @@ c6cb50e7eea0df1fd3eaf52ada2358f5423afd7c0b5ee2395231a9b3208ffcaf
 
 ### SHA-384
 
-_Not yet implemented_
+```reason
+let hash = ReCrypt.Sha384.make("unicorn");
+```
+
+produces the following hash:
+
+```
+de41efa2be0844783ea107630a79246fb1f7b3ab97b35c5e4b70130804f876f64b645c1064a775507a7ac3be457539f2
+```
 
 ### SHA512
 

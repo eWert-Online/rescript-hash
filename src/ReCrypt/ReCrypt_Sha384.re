@@ -1,13 +1,13 @@
 /* constants [§4.2.3] */
 let initialHash = [|
-  0x6a09e667f3bcc908L,
-  0xbb67ae8584caa73bL,
-  0x3c6ef372fe94f82bL,
-  0xa54ff53a5f1d36f1L,
-  0x510e527fade682d1L,
-  0x9b05688c2b3e6c1fL,
-  0x1f83d9abfb41bd6bL,
-  0x5be0cd19137e2179L,
+  (-0x344462a23efa6128L),
+  0x629a292a367cd507L,
+  (-0x6ea6fea5cf8f22e9L),
+  0x152fecd8f70e5939L,
+  0x67332667ffc00b31L,
+  (-0x714bb57897a7eaefL),
+  (-0x24f3d1f29b067059L),
+  0x47b5481dbefa4fa4L,
 |];
 
 let processMessage = (message: Bytes.t) => {
@@ -51,7 +51,7 @@ let processMessage = (message: Bytes.t) => {
         (h^)
         ->Int64.add(ReCrypt_Functions.Sha384_512.sum1(e^))
         ->Int64.add(ReCrypt_Functions.Sha384_512.change(e^, f^, g^))
-        ->Int64.add(ReCrypt_Constants.sha512[t])
+        ->Int64.add(ReCrypt_Constants.sha384[t])
         ->Int64.add(w[t]);
 
       let temp2 =
@@ -80,17 +80,15 @@ let processMessage = (message: Bytes.t) => {
     h := Int64.add(originalH, h^);
   };
 
-  let sha512raw = Bytes.make(64, Char.chr(0));
-  ReCrypt_Utils.append64(sha512raw, a^, 0);
-  ReCrypt_Utils.append64(sha512raw, b^, 8);
-  ReCrypt_Utils.append64(sha512raw, c^, 16);
-  ReCrypt_Utils.append64(sha512raw, d^, 24);
-  ReCrypt_Utils.append64(sha512raw, e^, 32);
-  ReCrypt_Utils.append64(sha512raw, f^, 40);
-  ReCrypt_Utils.append64(sha512raw, g^, 48);
-  ReCrypt_Utils.append64(sha512raw, h^, 56);
+  let sha384raw = Bytes.make(48, Char.chr(0));
+  ReCrypt_Utils.append64(sha384raw, a^, 0);
+  ReCrypt_Utils.append64(sha384raw, b^, 8);
+  ReCrypt_Utils.append64(sha384raw, c^, 16);
+  ReCrypt_Utils.append64(sha384raw, d^, 24);
+  ReCrypt_Utils.append64(sha384raw, e^, 32);
+  ReCrypt_Utils.append64(sha384raw, f^, 40);
 
-  Bytes.to_string(sha512raw)->ReCrypt_Utils.stringToHex;
+  Bytes.to_string(sha384raw)->ReCrypt_Utils.stringToHex;
 };
 
 let make = message => {

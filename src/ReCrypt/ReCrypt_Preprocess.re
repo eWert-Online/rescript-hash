@@ -23,7 +23,7 @@ module Sha256 = {
   };
 };
 
-module Sha512 = {
+module Sha384_512 = {
   let pad = (msgBytes: Bytes.t) => {
     let size = ref(Bytes.length(msgBytes) + 16 + 1);
     while (size^ mod 128 != 0) {
