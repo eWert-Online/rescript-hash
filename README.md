@@ -8,7 +8,7 @@ Secure Hash Algorithms implemented in ReasonML based on
 **Incomplete**
 
 - [ ] SHA-1
-- [ ] SHA224
+- [x] SHA224
 - [x] SHA256
 - [x] SHA-384
 - [x] SHA512
@@ -41,40 +41,28 @@ _Not yet implemented_
 
 ### SHA224
 
-_Not yet implemented_
+```reason
+let hash = ReCrypt.Sha224.make("unicorn");
+/* 983d515094574856a57db3a13741f0a65509bb640bfa551e78fa01d9 */
+```
 
 ### SHA256
 
 ```reason
 let hash = ReCrypt.Sha256.make("unicorn");
-```
-
-produces the following hash:
-
-```
-c6cb50e7eea0df1fd3eaf52ada2358f5423afd7c0b5ee2395231a9b3208ffcaf
+/* c6cb50e7eea0df1fd3eaf52ada2358f5423afd7c0b5ee2395231a9b3208ffcaf */
 ```
 
 ### SHA-384
 
 ```reason
 let hash = ReCrypt.Sha384.make("unicorn");
-```
-
-produces the following hash:
-
-```
-de41efa2be0844783ea107630a79246fb1f7b3ab97b35c5e4b70130804f876f64b645c1064a775507a7ac3be457539f2
+/* de41efa2be0844783ea107630a79246fb1f7b3ab97b35c5e4b70130804f876f64b645c1064a775507a7ac3be457539f2 */
 ```
 
 ### SHA512
 
 ```reason
 let hash = ReCrypt.Sha512.make("unicorn");
-```
-
-produces the following hash:
-
-```
-e233b19aabc7d5e53826fb734d1222f1f0444c3a3fc67ff4af370a66e7cadd2cb24009f1bc86f0bed12ca5fcb226145ad10fc5f650f6ef0959f8aadc5a594b27
+/* e233b19aabc7d5e53826fb734d1222f1f0444c3a3fc67ff4af370a66e7cadd2cb24009f1bc86f0bed12ca5fcb226145ad10fc5f650f6ef0959f8aadc5a594b27 */
 ```

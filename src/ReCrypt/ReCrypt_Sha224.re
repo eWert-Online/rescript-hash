@@ -1,13 +1,13 @@
 /* constants [§4.2.3] */
 let initialHash = [|
-  0x6a09e667l,
-  (-0x4498517bl),
-  0x3c6ef372l,
-  (-0x5ab00ac6l),
-  0x510e527fl,
-  (-0x64fa9774l),
-  0x1f83d9abl,
-  0x5be0cd19l,
+  (-0x3efa6128l),
+  0x367cd507l,
+  0x3070dd17l,
+  (-0x8f1a6c7l),
+  (-0x3ff4cfl),
+  0x68581511l,
+  0x64f98fa7l,
+  (-0x4105b05cl),
 |];
 
 let processMessage = (message: Bytes.t) => {
@@ -81,7 +81,7 @@ let processMessage = (message: Bytes.t) => {
         (h^)
         ->Int32.add(ReCrypt_Functions.Sha224_256.sum1(e^))
         ->Int32.add(ReCrypt_Functions.Sha224_256.change(e^, f^, g^))
-        ->Int32.add(ReCrypt_Constants.sha256[t])
+        ->Int32.add(ReCrypt_Constants.sha224[t])
         ->Int32.add(w[t]);
 
       let temp2 =
@@ -110,17 +110,16 @@ let processMessage = (message: Bytes.t) => {
     h := Int32.add(originalH, h^);
   };
 
-  let sha256raw = Bytes.make(32, Char.chr(0));
-  ReCrypt_Utils.append32(sha256raw, a^, 0);
-  ReCrypt_Utils.append32(sha256raw, b^, 4);
-  ReCrypt_Utils.append32(sha256raw, c^, 8);
-  ReCrypt_Utils.append32(sha256raw, d^, 12);
-  ReCrypt_Utils.append32(sha256raw, e^, 16);
-  ReCrypt_Utils.append32(sha256raw, f^, 20);
-  ReCrypt_Utils.append32(sha256raw, g^, 24);
-  ReCrypt_Utils.append32(sha256raw, h^, 28);
+  let sha224raw = Bytes.make(28, Char.chr(0));
+  ReCrypt_Utils.append32(sha224raw, a^, 0);
+  ReCrypt_Utils.append32(sha224raw, b^, 4);
+  ReCrypt_Utils.append32(sha224raw, c^, 8);
+  ReCrypt_Utils.append32(sha224raw, d^, 12);
+  ReCrypt_Utils.append32(sha224raw, e^, 16);
+  ReCrypt_Utils.append32(sha224raw, f^, 20);
+  ReCrypt_Utils.append32(sha224raw, g^, 24);
 
-  Bytes.to_string(sha256raw)->ReCrypt_Utils.stringToHex;
+  Bytes.to_string(sha224raw)->ReCrypt_Utils.stringToHex;
 };
 
 let make = message => {

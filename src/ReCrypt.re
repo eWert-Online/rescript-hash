@@ -1,3 +1,7 @@
+module Sha224 = {
+  include ReCrypt_Sha224;
+};
+
 module Sha256 = {
   include ReCrypt_Sha256;
 };

@@ -1,7 +1,7 @@
 /**
   * Preprocessing [§5]
   */
-module Sha256 = {
+module Sha224_256 = {
   let pad = (msgBytes: Bytes.t) => {
     let size = ref(Bytes.length(msgBytes) + 8 + 1);
     while (size^ mod 64 != 0) {

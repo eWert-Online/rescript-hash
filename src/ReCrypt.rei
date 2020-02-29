@@ -1,6 +1,11 @@
 /* BASED ON: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf */
 
 /**
+  Module for creating SHA224 hashes
+ */
+module Sha224: {let make: string => string;};
+
+/**
   Module for creating SHA256 hashes
  */
 module Sha256: {let make: string => string;};
