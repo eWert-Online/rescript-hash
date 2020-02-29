@@ -1,7 +1,7 @@
 {
   "name": "@ewert-online/re-crypt",
   "description": "Secure Hash Algorithms for ReasonML",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "scripts": {
     "prepare": "npm run test && npm run build",
     "build": "bsb -clean-world && bsb -make-world",
@@ -22,6 +22,10 @@
     "crypto",
     "cryptography",
     "sha",
+    "sha1",
+    "sha224",
+    "sha256",
+    "sha384",
     "sha512"
   ],
   "author": "Torben Ewert",
