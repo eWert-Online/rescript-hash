@@ -3,6 +3,7 @@ open Expect;
 
 type test = {
   input: string,
+  sha1: string,
   sha224: string,
   sha256: string,
   sha384: string,
@@ -12,6 +13,7 @@ type test = {
 let tests = [|
   {
     input: "unicorn",
+    sha1: "84de6753b298abd027fcd1d790eade2413eafb5a",
     sha224: "983d515094574856a57db3a13741f0a65509bb640bfa551e78fa01d9",
     sha256: "c6cb50e7eea0df1fd3eaf52ada2358f5423afd7c0b5ee2395231a9b3208ffcaf",
     sha384: "de41efa2be0844783ea107630a79246fb1f7b3ab97b35c5e4b70130804f876f64b645c1064a775507a7ac3be457539f2",
@@ -19,6 +21,7 @@ let tests = [|
   },
   {
     input: "",
+    sha1: "da39a3ee5e6b4b0d3255bfef95601890afd80709",
     sha224: "d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f",
     sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     sha384: "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b",
@@ -26,6 +29,7 @@ let tests = [|
   },
   {
     input: "Some pretty long string which probably exeed the length of one message block (now it really does it...aaaaaaaaaaaaaaaaaaaaaaah)",
+    sha1: "87fd7e086d40019262d6fc1ceccd9d731afa6be3",
     sha224: "935f26cf156817962231e82021da64b808b3c68fb9ff9f53ce9c75cc",
     sha256: "69c22a11ab4c21beeb184e4fa40556d41bc4d8fe431618b21715352fac67e9ec",
     sha384: "72fc789c77cce0797d67d62d27f93c0fe550b48e3069d4a354430dac61992946b25c37257eaf0df33ea319202de5767e",
@@ -33,6 +37,7 @@ let tests = [|
   },
   {
     input: "This message is exactly one bit longer than one 128bit word: f49932d6b40a4e4d8424196af7c3477397818e59e748f722186",
+    sha1: "b0aec6e4ac57547d24be7b38768a7c29c9456a7b",
     sha224: "19f7516f806e661dd2b72326bdfee7b4805560122becadb3801d8da7",
     sha256: "1a99b57fe8b12fcc8294f9238d1c1e893d19d798bd20a45a19f1d45d2543f891",
     sha384: "53cf6f7f2520d951de56c82d09954b61ec04e502ac49831a7e0e3cde0a15b096f48e70eb599b26ca4d4f608f36ada480",
@@ -40,12 +45,33 @@ let tests = [|
   },
   {
     input: "This message is exactly one bit longer than a 64bit word",
+    sha1: "042a302c0fb5ee74143d99a795bcc1036683f602",
     sha224: "a671f59e0187aef4a1812bb7380e3988b2ed9f41fd2e8a1db91ebbbe",
     sha256: "15cba6d94c28070f62aa1a16e51d44c0514f0acd5272d482ae3cfdb9a4f79f29",
     sha384: "db5889404ed7f067781fcb61f800d58bed3791b7f4eef2ca16984501db5549708bd0170dcf3c9bd2877bc571af65dbf9",
     sha512: "af07decb831f19434525de42f36e9317695f8e52158a3141308e653b67007ede719c0bbd43a5418b1bf9180ef050c580ff3d787279ab0b4d8a259f148f0abfcd",
   },
 |];
+
+describe("Sha1", () => {
+  describe("make()", () => {
+    test("\"" ++ tests[0].input ++ "\"", () =>
+      expect(ReCrypt.Sha1.make(tests[0].input)) |> toBe(tests[0].sha1)
+    );
+    test("\"" ++ tests[1].input ++ "\"", () =>
+      expect(ReCrypt.Sha1.make(tests[1].input)) |> toBe(tests[1].sha1)
+    );
+    test("\"" ++ tests[2].input ++ "\"", () =>
+      expect(ReCrypt.Sha1.make(tests[2].input)) |> toBe(tests[2].sha1)
+    );
+    test("\"" ++ tests[3].input ++ "\"", () =>
+      expect(ReCrypt.Sha1.make(tests[3].input)) |> toBe(tests[3].sha1)
+    );
+    test("\"" ++ tests[4].input ++ "\"", () =>
+      expect(ReCrypt.Sha1.make(tests[4].input)) |> toBe(tests[4].sha1)
+    );
+  })
+});
 
 describe("Sha224", () => {
   describe("make()", () => {

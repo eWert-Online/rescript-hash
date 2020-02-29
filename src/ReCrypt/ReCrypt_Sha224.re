@@ -124,6 +124,6 @@ let processMessage = (message: Bytes.t) => {
 
 let make = message => {
   let messageBytes = Bytes.of_string(message);
-  let paddedMessage = ReCrypt_Preprocess.Sha224_256.pad(messageBytes);
+  let paddedMessage = ReCrypt_Preprocess.Sha1_224_256.pad(messageBytes);
   processMessage(paddedMessage);
 };

@@ -5,9 +5,9 @@ Secure Hash Algorithms implemented in ReasonML based on
 
 # What state is it in?
 
-**Incomplete**
+**Complete**
 
-- [ ] SHA-1
+- [x] SHA-1
 - [x] SHA224
 - [x] SHA256
 - [x] SHA-384
@@ -37,7 +37,10 @@ Then add `@ewert-online/re-crypt` as a dependency to `bsconfig.json`:
 
 ### SHA-1
 
-_Not yet implemented_
+```reason
+let hash = ReCrypt.Sha1.make("unicorn");
+/* 84de6753b298abd027fcd1d790eade2413eafb5a */
+```
 
 ### SHA224
 

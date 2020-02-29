@@ -2,6 +2,16 @@
   * Constants [§4.2]
   */
 
+let sha1 = t => {
+  switch (t) {
+  | t when t >= 0 && t <= 19 => 0x5A827999l
+  | t when t >= 20 && t <= 39 => 0x6ED9EBA1l
+  | t when t >= 40 && t <= 59 => 0x8F1BBCDCl
+  | t when t >= 60 && t <= 79 => 0xCA62C1D6l
+  | _ => 0x00l
+  };
+};
+
 let sha224 = [|
   0x428a2f98l,
   0x71374491l,

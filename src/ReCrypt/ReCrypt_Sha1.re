@@ -1,13 +1,10 @@
 /* constants [§4.2.3] */
 let initialHash = [|
-  0x6a09e667l,
-  (-0x4498517bl),
-  0x3c6ef372l,
-  (-0x5ab00ac6l),
-  0x510e527fl,
-  (-0x64fa9774l),
-  0x1f83d9abl,
-  0x5be0cd19l,
+  0x67452301l,
+  0xEFCDAB89l,
+  0x98BADCFEl,
+  0x10325476l,
+  0xC3D2E1F0l,
 |];
 
 let processMessage = (message: Bytes.t) => {
@@ -18,12 +15,9 @@ let processMessage = (message: Bytes.t) => {
   let c = ref(initialHash[2]);
   let d = ref(initialHash[3]);
   let e = ref(initialHash[4]);
-  let f = ref(initialHash[5]);
-  let g = ref(initialHash[6]);
-  let h = ref(initialHash[7]);
 
   for (i in 0 to chunks - 1) {
-    let w = Array.make(64, Int32.zero);
+    let w = Array.make(80, Int32.zero);
 
     for (t in 0 to 15) {
       w[t] =
@@ -59,12 +53,15 @@ let processMessage = (message: Bytes.t) => {
           );
     };
 
-    for (t in 16 to 63) {
+    for (t in 16 to 79) {
       w[t] =
-        ReCrypt_Functions.Sha224_256.sigma1(w[t - 2])
-        ->Int32.add(w[t - 7])
-        ->Int32.add(ReCrypt_Functions.Sha224_256.sigma0(w[t - 15]))
-        ->Int32.add(w[t - 16]);
+        ReCrypt_Functions.Sha1.rotl(
+          w[t - 3]
+          ->Int32.logxor(w[t - 8])
+          ->Int32.logxor(w[t - 14])
+          ->Int32.logxor(w[t - 16]),
+          1,
+        );
     };
 
     let originalA = a^;
@@ -72,32 +69,20 @@ let processMessage = (message: Bytes.t) => {
     let originalC = c^;
     let originalD = d^;
     let originalE = e^;
-    let originalF = f^;
-    let originalG = g^;
-    let originalH = h^;
 
-    for (t in 0 to 63) {
-      let temp1 =
-        (h^)
-        ->Int32.add(ReCrypt_Functions.Sha224_256.sum1(e^))
-        ->Int32.add(ReCrypt_Functions.Sha224_256.change(e^, f^, g^))
-        ->Int32.add(ReCrypt_Constants.sha256[t])
+    for (t in 0 to 79) {
+      let temp =
+        ReCrypt_Functions.Sha1.rotl(a^, 5)
+        ->Int32.add(ReCrypt_Functions.Sha1.f(t, b^, c^, d^))
+        ->Int32.add(e^)
+        ->Int32.add(ReCrypt_Constants.sha1(t))
         ->Int32.add(w[t]);
 
-      let temp2 =
-        Int32.add(
-          ReCrypt_Functions.Sha224_256.sum0(a^),
-          ReCrypt_Functions.Sha224_256.majority(a^, b^, c^),
-        );
-
-      h := g^;
-      g := f^;
-      f := e^;
-      e := Int32.add(d^, temp1);
+      e := d^;
       d := c^;
-      c := b^;
+      c := ReCrypt_Functions.Sha1.rotl(b^, 30);
       b := a^;
-      a := Int32.add(temp1, temp2);
+      a := temp;
     };
 
     a := Int32.add(originalA, a^);
@@ -105,22 +90,16 @@ let processMessage = (message: Bytes.t) => {
     c := Int32.add(originalC, c^);
     d := Int32.add(originalD, d^);
     e := Int32.add(originalE, e^);
-    f := Int32.add(originalF, f^);
-    g := Int32.add(originalG, g^);
-    h := Int32.add(originalH, h^);
   };
 
-  let sha256raw = Bytes.make(32, Char.chr(0));
-  ReCrypt_Utils.append32(sha256raw, a^, 0);
-  ReCrypt_Utils.append32(sha256raw, b^, 4);
-  ReCrypt_Utils.append32(sha256raw, c^, 8);
-  ReCrypt_Utils.append32(sha256raw, d^, 12);
-  ReCrypt_Utils.append32(sha256raw, e^, 16);
-  ReCrypt_Utils.append32(sha256raw, f^, 20);
-  ReCrypt_Utils.append32(sha256raw, g^, 24);
-  ReCrypt_Utils.append32(sha256raw, h^, 28);
+  let sha1raw = Bytes.make(20, Char.chr(0));
+  ReCrypt_Utils.append32(sha1raw, a^, 0);
+  ReCrypt_Utils.append32(sha1raw, b^, 4);
+  ReCrypt_Utils.append32(sha1raw, c^, 8);
+  ReCrypt_Utils.append32(sha1raw, d^, 12);
+  ReCrypt_Utils.append32(sha1raw, e^, 16);
 
-  Bytes.to_string(sha256raw)->ReCrypt_Utils.stringToHex;
+  Bytes.to_string(sha1raw)->ReCrypt_Utils.stringToHex;
 };
 
 let make = message => {
