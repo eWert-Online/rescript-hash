@@ -3,6 +3,7 @@ open Expect;
 
 type test = {
   input: string,
+  md5: string,
   sha1: string,
   sha224: string,
   sha256: string,
@@ -13,6 +14,7 @@ type test = {
 let tests = [|
   {
     input: "unicorn",
+    md5: "1abcb33beeb811dca15f0ac3e47b88d9",
     sha1: "84de6753b298abd027fcd1d790eade2413eafb5a",
     sha224: "983d515094574856a57db3a13741f0a65509bb640bfa551e78fa01d9",
     sha256: "c6cb50e7eea0df1fd3eaf52ada2358f5423afd7c0b5ee2395231a9b3208ffcaf",
@@ -21,6 +23,7 @@ let tests = [|
   },
   {
     input: "",
+    md5: "d41d8cd98f00b204e9800998ecf8427e",
     sha1: "da39a3ee5e6b4b0d3255bfef95601890afd80709",
     sha224: "d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f",
     sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -29,6 +32,7 @@ let tests = [|
   },
   {
     input: "Some pretty long string which probably exeed the length of one message block (now it really does it...aaaaaaaaaaaaaaaaaaaaaaah)",
+    md5: "f59fbeaf0597357d7fb6cf4755211e99",
     sha1: "87fd7e086d40019262d6fc1ceccd9d731afa6be3",
     sha224: "935f26cf156817962231e82021da64b808b3c68fb9ff9f53ce9c75cc",
     sha256: "69c22a11ab4c21beeb184e4fa40556d41bc4d8fe431618b21715352fac67e9ec",
@@ -37,6 +41,7 @@ let tests = [|
   },
   {
     input: "This message is exactly one bit longer than one 128bit word: f49932d6b40a4e4d8424196af7c3477397818e59e748f722186",
+    md5: "c46500acee5415406c471da700f1511c",
     sha1: "b0aec6e4ac57547d24be7b38768a7c29c9456a7b",
     sha224: "19f7516f806e661dd2b72326bdfee7b4805560122becadb3801d8da7",
     sha256: "1a99b57fe8b12fcc8294f9238d1c1e893d19d798bd20a45a19f1d45d2543f891",
@@ -45,6 +50,7 @@ let tests = [|
   },
   {
     input: "This message is exactly one bit longer than a 64bit word",
+    md5: "7d3febf8022523df2093238bf6a07792",
     sha1: "042a302c0fb5ee74143d99a795bcc1036683f602",
     sha224: "a671f59e0187aef4a1812bb7380e3988b2ed9f41fd2e8a1db91ebbbe",
     sha256: "15cba6d94c28070f62aa1a16e51d44c0514f0acd5272d482ae3cfdb9a4f79f29",
@@ -53,102 +59,80 @@ let tests = [|
   },
 |];
 
+describe("MD5", () => {
+  describe("make()", () => {
+    Array.iter(
+      (t: test) => {
+        test("\"" ++ t.input ++ "\"", () =>
+          expect(ReCrypt.MD5.make(t.input)) |> toBe(t.md5)
+        )
+      },
+      tests,
+    )
+  })
+});
+
 describe("Sha1", () => {
   describe("make()", () => {
-    test("\"" ++ tests[0].input ++ "\"", () =>
-      expect(ReCrypt.Sha1.make(tests[0].input)) |> toBe(tests[0].sha1)
-    );
-    test("\"" ++ tests[1].input ++ "\"", () =>
-      expect(ReCrypt.Sha1.make(tests[1].input)) |> toBe(tests[1].sha1)
-    );
-    test("\"" ++ tests[2].input ++ "\"", () =>
-      expect(ReCrypt.Sha1.make(tests[2].input)) |> toBe(tests[2].sha1)
-    );
-    test("\"" ++ tests[3].input ++ "\"", () =>
-      expect(ReCrypt.Sha1.make(tests[3].input)) |> toBe(tests[3].sha1)
-    );
-    test("\"" ++ tests[4].input ++ "\"", () =>
-      expect(ReCrypt.Sha1.make(tests[4].input)) |> toBe(tests[4].sha1)
-    );
+    Array.iter(
+      (t: test) => {
+        test("\"" ++ t.input ++ "\"", () =>
+          expect(ReCrypt.Sha1.make(t.input)) |> toBe(t.sha1)
+        )
+      },
+      tests,
+    )
   })
 });
 
 describe("Sha224", () => {
   describe("make()", () => {
-    test("\"" ++ tests[0].input ++ "\"", () =>
-      expect(ReCrypt.Sha224.make(tests[0].input)) |> toBe(tests[0].sha224)
-    );
-    test("\"" ++ tests[1].input ++ "\"", () =>
-      expect(ReCrypt.Sha224.make(tests[1].input)) |> toBe(tests[1].sha224)
-    );
-    test("\"" ++ tests[2].input ++ "\"", () =>
-      expect(ReCrypt.Sha224.make(tests[2].input)) |> toBe(tests[2].sha224)
-    );
-    test("\"" ++ tests[3].input ++ "\"", () =>
-      expect(ReCrypt.Sha224.make(tests[3].input)) |> toBe(tests[3].sha224)
-    );
-    test("\"" ++ tests[4].input ++ "\"", () =>
-      expect(ReCrypt.Sha224.make(tests[4].input)) |> toBe(tests[4].sha224)
-    );
+    Array.iter(
+      (t: test) => {
+        test("\"" ++ t.input ++ "\"", () =>
+          expect(ReCrypt.Sha224.make(t.input)) |> toBe(t.sha224)
+        )
+      },
+      tests,
+    )
   })
 });
 
 describe("Sha256", () => {
   describe("make()", () => {
-    test("\"" ++ tests[0].input ++ "\"", () =>
-      expect(ReCrypt.Sha256.make(tests[0].input)) |> toBe(tests[0].sha256)
-    );
-    test("\"" ++ tests[1].input ++ "\"", () =>
-      expect(ReCrypt.Sha256.make(tests[1].input)) |> toBe(tests[1].sha256)
-    );
-    test("\"" ++ tests[2].input ++ "\"", () =>
-      expect(ReCrypt.Sha256.make(tests[2].input)) |> toBe(tests[2].sha256)
-    );
-    test("\"" ++ tests[3].input ++ "\"", () =>
-      expect(ReCrypt.Sha256.make(tests[3].input)) |> toBe(tests[3].sha256)
-    );
-    test("\"" ++ tests[4].input ++ "\"", () =>
-      expect(ReCrypt.Sha256.make(tests[4].input)) |> toBe(tests[4].sha256)
-    );
+    Array.iter(
+      (t: test) => {
+        test("\"" ++ t.input ++ "\"", () =>
+          expect(ReCrypt.Sha256.make(t.input)) |> toBe(t.sha256)
+        )
+      },
+      tests,
+    )
   })
 });
 
 describe("Sha384", () => {
   describe("make()", () => {
-    test("\"" ++ tests[0].input ++ "\"", () =>
-      expect(ReCrypt.Sha384.make(tests[0].input)) |> toBe(tests[0].sha384)
-    );
-    test("\"" ++ tests[1].input ++ "\"", () =>
-      expect(ReCrypt.Sha384.make(tests[1].input)) |> toBe(tests[1].sha384)
-    );
-    test("\"" ++ tests[2].input ++ "\"", () =>
-      expect(ReCrypt.Sha384.make(tests[2].input)) |> toBe(tests[2].sha384)
-    );
-    test("\"" ++ tests[3].input ++ "\"", () =>
-      expect(ReCrypt.Sha384.make(tests[3].input)) |> toBe(tests[3].sha384)
-    );
-    test("\"" ++ tests[4].input ++ "\"", () =>
-      expect(ReCrypt.Sha384.make(tests[4].input)) |> toBe(tests[4].sha384)
-    );
+    Array.iter(
+      (t: test) => {
+        test("\"" ++ t.input ++ "\"", () =>
+          expect(ReCrypt.Sha384.make(t.input)) |> toBe(t.sha384)
+        )
+      },
+      tests,
+    )
   })
 });
 
 describe("Sha512", () => {
   describe("make()", () => {
-    test("\"" ++ tests[0].input ++ "\"", () =>
-      expect(ReCrypt.Sha512.make(tests[0].input)) |> toBe(tests[0].sha512)
-    );
-    test("\"" ++ tests[1].input ++ "\"", () =>
-      expect(ReCrypt.Sha512.make(tests[1].input)) |> toBe(tests[1].sha512)
-    );
-    test("\"" ++ tests[2].input ++ "\"", () =>
-      expect(ReCrypt.Sha512.make(tests[2].input)) |> toBe(tests[2].sha512)
-    );
-    test("\"" ++ tests[3].input ++ "\"", () =>
-      expect(ReCrypt.Sha512.make(tests[3].input)) |> toBe(tests[3].sha512)
-    );
-    test("\"" ++ tests[4].input ++ "\"", () =>
-      expect(ReCrypt.Sha512.make(tests[4].input)) |> toBe(tests[4].sha512)
-    );
+    Array.iter(
+      (t: test) => {
+        test("\"" ++ t.input ++ "\"", () =>
+          expect(ReCrypt.Sha512.make(t.input)) |> toBe(t.sha512)
+        )
+      },
+      tests,
+    )
   })
 });

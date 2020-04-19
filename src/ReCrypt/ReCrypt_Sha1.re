@@ -1,4 +1,14 @@
 /* constants [§4.2.3] */
+let constants = t => {
+  switch (t) {
+  | t when t >= 0 && t <= 19 => 0x5A827999l
+  | t when t >= 20 && t <= 39 => 0x6ED9EBA1l
+  | t when t >= 40 && t <= 59 => 0x8F1BBCDCl
+  | t when t >= 60 && t <= 79 => 0xCA62C1D6l
+  | _ => 0x00l
+  };
+};
+
 let initialHash = [|
   0x67452301l,
   0xEFCDAB89l,
@@ -75,7 +85,7 @@ let processMessage = (message: Bytes.t) => {
         ReCrypt_Functions.Sha1.rotl(a^, 5)
         ->Int32.add(ReCrypt_Functions.Sha1.f(t, b^, c^, d^))
         ->Int32.add(e^)
-        ->Int32.add(ReCrypt_Constants.sha1(t))
+        ->Int32.add(constants(t))
         ->Int32.add(w[t]);
 
       e := d^;

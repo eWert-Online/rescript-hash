@@ -1,3 +1,7 @@
+module MD5 = {
+  include ReCrypt_MD5;
+};
+
 module Sha1 = {
   include ReCrypt_Sha1;
 };

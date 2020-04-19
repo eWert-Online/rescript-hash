@@ -1,6 +1,12 @@
 /**
   * Logical functions [§4.1]
   */
+module MD5 = {
+  let rotl = (x, n) => {
+    x lsl n lor x lsr (64 - n);
+  };
+};
+
 module Sha1 = {
   let rotl = (x, n) => {
     Int32.logor(

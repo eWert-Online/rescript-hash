@@ -19,7 +19,16 @@ module Sha1_224_256 = {
         }
       });
 
-    ReCrypt_Utils.toBytes(length * 8, bytes);
+    let va = ref(length * 8);
+    for (i in 1 to 15) {
+      Bytes.set(
+        bytes,
+        Bytes.length(bytes) - i,
+        Char.chr(va^ land 0x000000FF),
+      );
+      va := va^ asr 8;
+    };
+    bytes;
   };
 };
 
@@ -41,6 +50,15 @@ module Sha384_512 = {
         }
       });
 
-    ReCrypt_Utils.toBytes(length * 8, bytes);
+    let va = ref(length * 8);
+    for (i in 1 to 15) {
+      Bytes.set(
+        bytes,
+        Bytes.length(bytes) - i,
+        Char.chr(va^ land 0x000000FF),
+      );
+      va := va^ asr 8;
+    };
+    bytes;
   };
 };

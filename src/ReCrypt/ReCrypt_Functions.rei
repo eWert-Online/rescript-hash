@@ -1,3 +1,5 @@
+module MD5: {let rotl: (int, int) => int;};
+
 module Sha1: {
   let f: (int, int32, int32, int32) => int32;
   let rotl: (int32, int) => int32;

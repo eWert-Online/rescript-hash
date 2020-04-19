@@ -1,29 +1,7 @@
-let int64_of_bytes = (input, j) => {
-  let v = ref(Int64.zero);
-  for (i in 0 to 7) {
-    v :=
-      Int64.shift_left(v^, 8)
-      ->Int64.add(
-          switch (Bytes.get(input, i + j)) {
-          | exception _ => Int64.zero
-          | some => Int64.of_int(Char.code(some) land 0xff)
-          },
-        );
+let append = (hash, value, offset) => {
+  for (j in 0 to 3) {
+    Bytes.set(hash, j + offset, (value lsr (j * 8) land 0xFF)->Char.chr);
   };
-  v^;
-};
-
-let toBytes = (value, bytes) => {
-  let va = ref(value);
-  for (i in 1 to 15) {
-    Bytes.set(
-      bytes,
-      Bytes.length(bytes) - i,
-      Char.chr(va^ land 0x000000FF),
-    );
-    va := va^ asr 8;
-  };
-  bytes;
 };
 
 let append32 = (hash, value, offset) => {

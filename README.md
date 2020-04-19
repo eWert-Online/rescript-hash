@@ -1,12 +1,13 @@
 # What is it?
 
-Secure Hash Algorithms implemented in ReasonML based on
-[FIPS180-4](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf)
+Hashing Algorithms implemented in ReasonML based on:
 
-# What state is it in?
+- [RFC 1321](https://tools.ietf.org/html/rfc1321)
+- [FIPS180-4](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf)
 
-**Complete**
+# The following algorithms are currently supported
 
+- [x] MD5
 - [x] SHA-1
 - [x] SHA-224
 - [x] SHA-256
@@ -34,6 +35,13 @@ Then add `@ewert-online/re-crypt` as a dependency to `bsconfig.json`:
 ```
 
 # How do I use it?
+
+### MD5
+
+```reason
+let hash = ReCrypt.MD5.make("unicorn");
+/* 1abcb33beeb811dca15f0ac3e47b88d9 */
+```
 
 ### SHA-1
 

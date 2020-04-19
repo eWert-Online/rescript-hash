@@ -1,6 +1,11 @@
 /* BASED ON: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf */
 
 /**
+  Module for creating MD5 hashes
+ */
+module MD5: {let make: string => string;};
+
+/**
   Module for creating SHA1 hashes
  */
 module Sha1: {let make: string => string;};

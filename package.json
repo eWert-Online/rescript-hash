@@ -21,6 +21,7 @@
     "bucklescript",
     "crypto",
     "cryptography",
+    "md5",
     "sha",
     "sha1",
     "sha224",
