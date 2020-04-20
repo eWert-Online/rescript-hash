@@ -65,7 +65,7 @@ let processMessage = (message: Bytes.t) => {
 
     for (t in 16 to 79) {
       w[t] =
-        ReCrypt_Functions.Sha1.rotl(
+        ReCrypt_Functions.SHA1.rotl(
           w[t - 3]
           ->Int32.logxor(w[t - 8])
           ->Int32.logxor(w[t - 14])
@@ -82,15 +82,15 @@ let processMessage = (message: Bytes.t) => {
 
     for (t in 0 to 79) {
       let temp =
-        ReCrypt_Functions.Sha1.rotl(a^, 5)
-        ->Int32.add(ReCrypt_Functions.Sha1.f(t, b^, c^, d^))
+        ReCrypt_Functions.SHA1.rotl(a^, 5)
+        ->Int32.add(ReCrypt_Functions.SHA1.f(t, b^, c^, d^))
         ->Int32.add(e^)
         ->Int32.add(constants(t))
         ->Int32.add(w[t]);
 
       e := d^;
       d := c^;
-      c := ReCrypt_Functions.Sha1.rotl(b^, 30);
+      c := ReCrypt_Functions.SHA1.rotl(b^, 30);
       b := a^;
       a := temp;
     };

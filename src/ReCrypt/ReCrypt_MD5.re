@@ -141,7 +141,7 @@ let processMessage = (message: Bytes.t) => {
 
       let temp =
         b^
-        + ReCrypt_Functions.MD5.rotl(
+        + ReCrypt_Functions.MD.rotl(
             a^ + f + w[g] + constants[j],
             s[(j lsr 4) lsl 2 lor (j land 3)],
           );
