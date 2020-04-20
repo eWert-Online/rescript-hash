@@ -1,5 +1,3 @@
-/* BASED ON: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf */
-
 /**
   Module for creating MD5 hashes
  */
