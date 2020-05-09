@@ -1,6 +1,6 @@
 {
-  "name": "@ewert-online/re-crypt",
-  "version": "0.1.0",
+  "name": "@space-labs/re-crypt",
+  "version": "1.3.0",
   "sources": [
     {
       "dir": "src",

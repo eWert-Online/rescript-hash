@@ -17,20 +17,20 @@ Hashing Algorithms implemented in ReasonML based on:
 # How do I install it?
 
 ```
-yarn add @ewert-online/re-crypt
+yarn add @space-labs/re-crypt
 ```
 
 or
 
 ```
-npm install @ewert-online/re-crypt --save
+npm install @space-labs/re-crypt --save
 ```
 
-Then add `@ewert-online/re-crypt` as a dependency to `bsconfig.json`:
+Then add `@space-labs/re-crypt` as a dependency to `bsconfig.json`:
 
 ```diff
 "bs-dependencies": [
-+  "@ewert-online/re-crypt"
++  "@space-labs/re-crypt"
 ]
 ```
 
