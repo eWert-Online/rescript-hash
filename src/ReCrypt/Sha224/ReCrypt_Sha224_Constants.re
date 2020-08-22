@@ -64,14 +64,3 @@ let k = [|
   (-0x41065c09l),
   (-0x398e870el),
 |];
-
-let initialHash = [|
-  (-0x3efa6128l),
-  0x367cd507l,
-  0x3070dd17l,
-  (-0x8f1a6c7l),
-  (-0x3ff4cfl),
-  0x68581511l,
-  0x64f98fa7l,
-  (-0x4105b05cl),
-|];

@@ -61,78 +61,60 @@ let tests = [|
 
 describe("MD5", () => {
   describe("make()", () => {
-    Array.iter(
-      (t: test) => {
-        test("\"" ++ t.input ++ "\"", () =>
-          expect(ReCrypt.MD5.make(t.input)) |> toBe(t.md5)
-        )
-      },
-      tests,
-    )
+    tests->Belt.Array.forEach(t => {
+      test("\"" ++ t.input ++ "\"", () =>
+        expect(ReCrypt.MD5.make(t.input)) |> toBe(t.md5)
+      )
+    })
   })
 });
 
 describe("Sha1", () => {
   describe("make()", () => {
-    Array.iter(
-      (t: test) => {
-        test("\"" ++ t.input ++ "\"", () =>
-          expect(ReCrypt.Sha1.make(t.input)) |> toBe(t.sha1)
-        )
-      },
-      tests,
-    )
+    tests->Belt.Array.forEach(t => {
+      test("\"" ++ t.input ++ "\"", () =>
+        expect(ReCrypt.Sha1.make(t.input)) |> toBe(t.sha1)
+      )
+    })
   })
 });
 
 describe("Sha224", () => {
   describe("make()", () => {
-    Array.iter(
-      (t: test) => {
-        test("\"" ++ t.input ++ "\"", () =>
-          expect(ReCrypt.Sha224.make(t.input)) |> toBe(t.sha224)
-        )
-      },
-      tests,
-    )
+    tests->Belt.Array.forEach(t => {
+      test("\"" ++ t.input ++ "\"", () =>
+        expect(ReCrypt.Sha224.make(t.input)) |> toBe(t.sha224)
+      )
+    })
   })
 });
 
 describe("Sha256", () => {
   describe("make()", () => {
-    Array.iter(
-      (t: test) => {
-        test("\"" ++ t.input ++ "\"", () =>
-          expect(ReCrypt.Sha256.make(t.input)) |> toBe(t.sha256)
-        )
-      },
-      tests,
-    )
+    tests->Belt.Array.forEach(t => {
+      test("\"" ++ t.input ++ "\"", () =>
+        expect(ReCrypt.Sha256.make(t.input)) |> toBe(t.sha256)
+      )
+    })
   })
 });
 
 describe("Sha384", () => {
   describe("make()", () => {
-    Array.iter(
-      (t: test) => {
-        test("\"" ++ t.input ++ "\"", () =>
-          expect(ReCrypt.Sha384.make(t.input)) |> toBe(t.sha384)
-        )
-      },
-      tests,
-    )
+    tests->Belt.Array.forEach(t => {
+      test("\"" ++ t.input ++ "\"", () =>
+        expect(ReCrypt.Sha384.make(t.input)) |> toBe(t.sha384)
+      )
+    })
   })
 });
 
 describe("Sha512", () => {
   describe("make()", () => {
-    Array.iter(
-      (t: test) => {
-        test("\"" ++ t.input ++ "\"", () =>
-          expect(ReCrypt.Sha512.make(t.input)) |> toBe(t.sha512)
-        )
-      },
-      tests,
-    )
+    tests->Belt.Array.forEach(t => {
+      test("\"" ++ t.input ++ "\"", () =>
+        expect(ReCrypt.Sha512.make(t.input)) |> toBe(t.sha512)
+      )
+    })
   })
 });

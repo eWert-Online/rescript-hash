@@ -1,27 +1,26 @@
-let pad = (msgBytes: Bytes.t) => {
-  let size = ref(Bytes.length(msgBytes) + 8 + 1);
+let pad = msg => {
+  let size = ref(Js.String.length(msg) + 8 + 1);
   while (size^ mod 64 != 0) {
     size := size^ + 1;
   };
 
-  let length = Bytes.length(msgBytes);
+  let length = Js.String.length(msg);
 
   let bytes =
-    Bytes.init(size^, index => {
+    Belt.Array.makeBy(size^, index =>
       switch (index) {
-      | i when i < length => Bytes.get(msgBytes, i)
-      | i when i == length => Char.chr(0x80)
-      | _ => Char.chr(0x00)
+      | i when i < length =>
+        msg->(Js.String2.charCodeAt(i))->Belt.Int.fromFloat
+      | i when i == length => 0x80
+      | _ => 0x00
       }
-    });
+    );
 
   let va = ref(length * 8);
   for (i in 1 to 15) {
-    Bytes.set(
-      bytes,
-      Bytes.length(bytes) - i,
-      Char.chr(va^ land 0x000000FF),
-    );
+    let _ =
+      bytes->Belt.Array.set(Belt.Array.length(bytes) - i, va^ land 255);
+
     va := va^ asr 8;
   };
   bytes;

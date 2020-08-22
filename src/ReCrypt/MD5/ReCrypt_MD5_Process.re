@@ -1,17 +1,22 @@
-let make = (message: Bytes.t) => {
-  let chunks = (Bytes.length(message) + 8) asr 6;
+let make = message => {
+  let chunks = (Belt.Array.length(message) + 8) asr 6;
 
-  let a = ref(ReCrypt_MD5_Constants.initialHash[0]);
-  let b = ref(ReCrypt_MD5_Constants.initialHash[1]);
-  let c = ref(ReCrypt_MD5_Constants.initialHash[2]);
-  let d = ref(ReCrypt_MD5_Constants.initialHash[3]);
+  let a = ref(0x67452301);
+  let b = ref(0xEFCDAB89);
+  let c = ref(0x98BADCFE);
+  let d = ref(0x10325476);
 
-  let w = Array.make(16, 0);
+  let w = Belt.Array.make(16, 0);
 
   for (i in 0 to chunks - 1) {
     for (j in 0 to 63) {
-      w[j lsr 2] =
-        Bytes.get(message, i lsl 6 + j)->Char.code lsl 24 lor w[j lsr 2] lsr 8;
+      let result =
+        Belt.Array.get(message, i lsl 6 + j)->Belt.Option.getWithDefault(0)
+        lsl 24
+        lor Belt.Array.get(w, j lsr 2)->Belt.Option.getWithDefault(0)
+        lsr 8;
+
+      w->Belt.Array.set(j lsr 2, result)->ignore;
     };
 
     let originalA = a^;
@@ -19,16 +24,16 @@ let make = (message: Bytes.t) => {
     let originalC = c^;
     let originalD = d^;
 
-    for (j in 0 to 63) {
+    ReCrypt_MD5_Constants.k->Belt.Array.forEachWithIndex((j, k) => {
       let f =
         if (0 <= j && j <= 15) {
-          b^ land c^ lor (lnot(b^) land d^);
+          b^ land c^ lor (b^ lxor (-1) land d^);
         } else if (16 <= j && j <= 31) {
-          b^ land d^ lor (c^ land lnot(d^));
+          b^ land d^ lor (c^ land (d^ lxor (-1)));
         } else if (32 <= j && j <= 47) {
           b^ lxor c^ lxor d^;
         } else {
-          c^ lxor (b^ lor lnot(d^));
+          c^ lxor (b^ lor (d^ lxor (-1)));
         };
 
       let g =
@@ -45,15 +50,17 @@ let make = (message: Bytes.t) => {
       let temp =
         b^
         + ReCrypt_Functions.MD.rotl(
-            a^ + f + w[g] + ReCrypt_MD5_Constants.k[j],
-            ReCrypt_MD5_Constants.s[(j lsr 4) lsl 2 lor (j land 3)],
+            a^ + f + w->Belt.Array.get(g)->Belt.Option.getWithDefault(0) + k,
+            ReCrypt_MD5_Constants.s
+            ->Belt.Array.get((j lsr 4) lsl 2 lor (j land 3))
+            ->Belt.Option.getWithDefault(0),
           );
 
       a := d^;
       d := c^;
       c := b^;
       b := temp;
-    };
+    });
 
     a := originalA + a^;
     b := originalB + b^;
@@ -61,12 +68,11 @@ let make = (message: Bytes.t) => {
     d := originalD + d^;
   };
 
-  let md5 = Bytes.make(16, Char.chr(0));
-
-  ReCrypt_Utils.append(md5, a^, 0);
-  ReCrypt_Utils.append(md5, b^, 4);
-  ReCrypt_Utils.append(md5, c^, 8);
-  ReCrypt_Utils.append(md5, d^, 12);
-
-  Bytes.to_string(md5)->ReCrypt_Utils.stringToHex;
+  Belt.Array.make(16, 0x00)
+  ->ReCrypt_Utils.append(a^, 0)
+  ->ReCrypt_Utils.append(b^, 4)
+  ->ReCrypt_Utils.append(c^, 8)
+  ->ReCrypt_Utils.append(d^, 12)
+  ->Belt.Array.reduce("", (acc, curr) => acc ++ Js.String.fromCharCode(curr))
+  ->ReCrypt_Utils.stringToHex;
 };
