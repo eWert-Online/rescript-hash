@@ -2,7 +2,6 @@
 'use strict';
 
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
-var Caml_int32 = require("bs-platform/lib/js/caml_int32.js");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var ReCrypt_Utils = require("../ReCrypt_Utils.bs.js");
 var ReCrypt_Functions_MD = require("../Functions/ReCrypt_Functions_MD.bs.js");
@@ -39,8 +38,8 @@ function make(message) {
                   )
               );
             var g = 0 <= j && j <= 15 ? j : (
-                16 <= j && j <= 31 ? (Caml_int32.imul(5, j) + 1 | 0) % 16 : (
-                    32 <= j && j <= 47 ? (Caml_int32.imul(3, j) + 5 | 0) % 16 : Caml_int32.imul(7, j) % 16
+                16 <= j && j <= 31 ? (Math.imul(5, j) + 1 | 0) % 16 : (
+                    32 <= j && j <= 47 ? (Math.imul(3, j) + 5 | 0) % 16 : Math.imul(7, j) % 16
                   )
               );
             var temp = b.contents + ReCrypt_Functions_MD.rotl(((a.contents + f | 0) + Belt_Option.getWithDefault(Belt_Array.get(w, g), 0) | 0) + k | 0, Belt_Option.getWithDefault(Belt_Array.get(ReCrypt_MD5_Constants.s, ((j >>> 4) << 2) | j & 3), 0)) | 0;
