@@ -2,6 +2,7 @@
 'use strict';
 
 var Jest = require("@glennsl/bs-jest/src/jest.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var ReCrypt = require("../src/ReCrypt.bs.js");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
 
@@ -57,7 +58,7 @@ Jest.describe("MD5", (function (param) {
         return Jest.describe("make()", (function (param) {
                       return Belt_Array.forEach(tests, (function (t) {
                                     return Jest.test("\"" + (t.input + "\""), (function (param) {
-                                                  return Jest.Expect.toBe(t.md5, Jest.Expect.expect(ReCrypt.MD5.make(t.input)));
+                                                  return Jest.Expect.toBe(t.md5, Jest.Expect.expect(Curry._1(ReCrypt.MD5.make, t.input)));
                                                 }));
                                   }));
                     }));
@@ -67,7 +68,7 @@ Jest.describe("Sha1", (function (param) {
         return Jest.describe("make()", (function (param) {
                       return Belt_Array.forEach(tests, (function (t) {
                                     return Jest.test("\"" + (t.input + "\""), (function (param) {
-                                                  return Jest.Expect.toBe(t.sha1, Jest.Expect.expect(ReCrypt.Sha1.make(t.input)));
+                                                  return Jest.Expect.toBe(t.sha1, Jest.Expect.expect(Curry._1(ReCrypt.Sha1.make, t.input)));
                                                 }));
                                   }));
                     }));
@@ -77,7 +78,7 @@ Jest.describe("Sha224", (function (param) {
         return Jest.describe("make()", (function (param) {
                       return Belt_Array.forEach(tests, (function (t) {
                                     return Jest.test("\"" + (t.input + "\""), (function (param) {
-                                                  return Jest.Expect.toBe(t.sha224, Jest.Expect.expect(ReCrypt.Sha224.make(t.input)));
+                                                  return Jest.Expect.toBe(t.sha224, Jest.Expect.expect(Curry._1(ReCrypt.Sha224.make, t.input)));
                                                 }));
                                   }));
                     }));
@@ -87,7 +88,7 @@ Jest.describe("Sha256", (function (param) {
         return Jest.describe("make()", (function (param) {
                       return Belt_Array.forEach(tests, (function (t) {
                                     return Jest.test("\"" + (t.input + "\""), (function (param) {
-                                                  return Jest.Expect.toBe(t.sha256, Jest.Expect.expect(ReCrypt.Sha256.make(t.input)));
+                                                  return Jest.Expect.toBe(t.sha256, Jest.Expect.expect(Curry._1(ReCrypt.Sha256.make, t.input)));
                                                 }));
                                   }));
                     }));
@@ -97,7 +98,7 @@ Jest.describe("Sha384", (function (param) {
         return Jest.describe("make()", (function (param) {
                       return Belt_Array.forEach(tests, (function (t) {
                                     return Jest.test("\"" + (t.input + "\""), (function (param) {
-                                                  return Jest.Expect.toBe(t.sha384, Jest.Expect.expect(ReCrypt.Sha384.make(t.input)));
+                                                  return Jest.Expect.toBe(t.sha384, Jest.Expect.expect(Curry._1(ReCrypt.Sha384.make, t.input)));
                                                 }));
                                   }));
                     }));
@@ -107,7 +108,7 @@ Jest.describe("Sha512", (function (param) {
         return Jest.describe("make()", (function (param) {
                       return Belt_Array.forEach(tests, (function (t) {
                                     return Jest.test("\"" + (t.input + "\""), (function (param) {
-                                                  return Jest.Expect.toBe(t.sha512, Jest.Expect.expect(ReCrypt.Sha512.make(t.input)));
+                                                  return Jest.Expect.toBe(t.sha512, Jest.Expect.expect(Curry._1(ReCrypt.Sha512.make, t.input)));
                                                 }));
                                   }));
                     }));

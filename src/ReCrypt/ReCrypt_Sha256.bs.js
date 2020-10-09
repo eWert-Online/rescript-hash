@@ -8,11 +8,5 @@ function make(message) {
   return ReCrypt_Sha256_Process.make(ReCrypt_Sha256_Preprocess.pad(message));
 }
 
-var Preprocess;
-
-var Process;
-
-exports.Preprocess = Preprocess;
-exports.Process = Process;
 exports.make = make;
 /* No side effect */

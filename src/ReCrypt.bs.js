@@ -8,29 +8,17 @@ var ReCrypt_Sha256 = require("./ReCrypt/ReCrypt_Sha256.bs.js");
 var ReCrypt_Sha384 = require("./ReCrypt/ReCrypt_Sha384.bs.js");
 var ReCrypt_Sha512 = require("./ReCrypt/ReCrypt_Sha512.bs.js");
 
-var MD5 = {
-  make: ReCrypt_MD5.make
-};
+var MD5 = ReCrypt_MD5;
 
-var Sha1 = {
-  make: ReCrypt_Sha1.make
-};
+var Sha1 = ReCrypt_Sha1;
 
-var Sha224 = {
-  make: ReCrypt_Sha224.make
-};
+var Sha224 = ReCrypt_Sha224;
 
-var Sha256 = {
-  make: ReCrypt_Sha256.make
-};
+var Sha256 = ReCrypt_Sha256;
 
-var Sha384 = {
-  make: ReCrypt_Sha384.make
-};
+var Sha384 = ReCrypt_Sha384;
 
-var Sha512 = {
-  make: ReCrypt_Sha512.make
-};
+var Sha512 = ReCrypt_Sha512;
 
 exports.MD5 = MD5;
 exports.Sha1 = Sha1;
