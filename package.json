@@ -1,5 +1,5 @@
 {
-  "name": "@space-labs/re-crypt",
+  "name": "rescript-hash",
   "description": "Secure Hash Algorithms for ReScript",
   "version": "1.4.0",
   "scripts": {
@@ -10,16 +10,17 @@
     "test": "bsb -clean-world && bsb -make-world && jest",
     "test:watch": "bsb -clean-world && bsb -make-world && jest --watchAll"
   },
-  "homepage": "https://github.com/eWert-Online/re-crypt#readme",
-  "bugs": "https://github.com/eWert-Online/re-crypt/issues",
+  "homepage": "https://github.com/eWert-Online/rescript-hash#readme",
+  "bugs": "https://github.com/eWert-Online/rescript-hash/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eWert-Online/re-crypt.git"
+    "url": "git+https://github.com/eWert-Online/rescript-hash.git"
   },
   "keywords": [
     "reason",
     "bucklescript",
     "rescript",
+    "hash",
     "crypto",
     "cryptography",
     "md5",
