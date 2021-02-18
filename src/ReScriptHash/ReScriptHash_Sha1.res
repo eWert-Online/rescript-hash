@@ -10,10 +10,10 @@ module Functions = {
 
   let f = (t, x, y, z) =>
     switch t {
-    | t when t >= 0 && t <= 19 => change(x, y, z)
-    | t when t >= 20 && t <= 39 => parity(x, y, z)
-    | t when t >= 40 && t <= 59 => majority(x, y, z)
-    | t when t >= 60 && t <= 79 => parity(x, y, z)
+    | t if t >= 0 && t <= 19 => change(x, y, z)
+    | t if t >= 20 && t <= 39 => parity(x, y, z)
+    | t if t >= 40 && t <= 59 => majority(x, y, z)
+    | t if t >= 60 && t <= 79 => parity(x, y, z)
     | _ => 0x00l
     }
 }
@@ -139,8 +139,8 @@ module Preprocess = {
 
     let bytes = Belt.Array.makeBy(size.contents, index =>
       switch index {
-      | i when i < length => msg->Js.String2.charCodeAt(i)->Belt.Int.fromFloat
-      | i when i == length => 0x80
+      | i if i < length => msg->Js.String2.charCodeAt(i)->Belt.Int.fromFloat
+      | i if i == length => 0x80
       | _ => 0x00
       }
     )

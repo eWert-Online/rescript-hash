@@ -138,8 +138,8 @@ module Preprocess = {
 
     let bytes = Belt.Array.makeBy(size.contents, index =>
       switch index {
-      | i when i < length => msg->Js.String2.charCodeAt(i)->Belt.Int.fromFloat
-      | i when i == length => 0x80
+      | i if i < length => msg->Js.String2.charCodeAt(i)->Belt.Int.fromFloat
+      | i if i == length => 0x80
       | _ => 0x00
       }
     )
