@@ -1,1 +1,3 @@
-let make: Js.String.t => string
+let make: string => string
+
+let makeU: (. string) => string

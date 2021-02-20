@@ -212,5 +212,8 @@ function make(message) {
               }), "");
 }
 
+var makeU = make;
+
 exports.make = make;
+exports.makeU = makeU;
 /* No side effect */

@@ -3,6 +3,7 @@
  */
 module MD5: {
   let make: string => string
+  let makeU: (. string) => string
 }
 
 /**
@@ -10,6 +11,7 @@ module MD5: {
 */
 module Sha1: {
   let make: string => string
+  let makeU: (. string) => string
 }
 
 /**
@@ -17,6 +19,7 @@ module Sha1: {
 */
 module Sha224: {
   let make: string => string
+  let makeU: (. string) => string
 }
 
 /**
@@ -24,6 +27,7 @@ module Sha224: {
 */
 module Sha256: {
   let make: string => string
+  let makeU: (. string) => string
 }
 
 /**
@@ -31,6 +35,7 @@ module Sha256: {
 */
 module Sha384: {
   let make: string => string
+  let makeU: (. string) => string
 }
 
 /**
@@ -38,4 +43,5 @@ module Sha384: {
 */
 module Sha512: {
   let make: string => string
+  let makeU: (. string) => string
 }

@@ -247,3 +247,5 @@ module Process = {
 }
 
 let make = message => message->Preprocess.pad->Process.make
+
+let makeU = (. message) => make(message)
