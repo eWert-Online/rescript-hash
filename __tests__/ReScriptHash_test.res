@@ -61,7 +61,7 @@ let tests = [
 
 describe("MD5", () =>
   describe("make()", () =>
-    tests->Belt.Array.forEach(t =>
+    tests->Js.Array2.forEach(t =>
       test("\"" ++ (t.input ++ "\""), () => expect(ReScriptHash.MD5.make(t.input)) |> toBe(t.md5))
     )
   )
@@ -69,7 +69,7 @@ describe("MD5", () =>
 
 describe("Sha1", () =>
   describe("make()", () =>
-    tests->Belt.Array.forEach(t =>
+    tests->Js.Array2.forEach(t =>
       test("\"" ++ (t.input ++ "\""), () => expect(ReScriptHash.Sha1.make(t.input)) |> toBe(t.sha1))
     )
   )
@@ -77,32 +77,40 @@ describe("Sha1", () =>
 
 describe("Sha224", () =>
   describe("make()", () =>
-    tests->Belt.Array.forEach(t =>
-      test("\"" ++ (t.input ++ "\""), () => expect(ReScriptHash.Sha224.make(t.input)) |> toBe(t.sha224))
+    tests->Js.Array2.forEach(t =>
+      test("\"" ++ (t.input ++ "\""), () =>
+        expect(ReScriptHash.Sha224.make(t.input)) |> toBe(t.sha224)
+      )
     )
   )
 )
 
 describe("Sha256", () =>
   describe("make()", () =>
-    tests->Belt.Array.forEach(t =>
-      test("\"" ++ (t.input ++ "\""), () => expect(ReScriptHash.Sha256.make(t.input)) |> toBe(t.sha256))
+    tests->Js.Array2.forEach(t =>
+      test("\"" ++ (t.input ++ "\""), () =>
+        expect(ReScriptHash.Sha256.make(t.input)) |> toBe(t.sha256)
+      )
     )
   )
 )
 
 describe("Sha384", () =>
   describe("make()", () =>
-    tests->Belt.Array.forEach(t =>
-      test("\"" ++ (t.input ++ "\""), () => expect(ReScriptHash.Sha384.make(t.input)) |> toBe(t.sha384))
+    tests->Js.Array2.forEach(t =>
+      test("\"" ++ (t.input ++ "\""), () =>
+        expect(ReScriptHash.Sha384.make(t.input)) |> toBe(t.sha384)
+      )
     )
   )
 )
 
 describe("Sha512", () =>
   describe("make()", () =>
-    tests->Belt.Array.forEach(t =>
-      test("\"" ++ (t.input ++ "\""), () => expect(ReScriptHash.Sha512.make(t.input)) |> toBe(t.sha512))
+    tests->Js.Array2.forEach(t =>
+      test("\"" ++ (t.input ++ "\""), () =>
+        expect(ReScriptHash.Sha512.make(t.input)) |> toBe(t.sha512)
+      )
     )
   )
 )

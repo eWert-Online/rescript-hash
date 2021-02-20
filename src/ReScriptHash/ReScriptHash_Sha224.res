@@ -21,7 +21,7 @@ module Utils = {
   let append32 = (hash, value, offset) => {
     for j in 0 to 3 {
       hash
-      ->Belt.Array.set(
+      ->Js.Array2.unsafe_set(
         j + offset,
         Int32.shift_right_logical(value, 24 - j * 8)->Int32.logand(0xFFl)->Int32.to_int,
       )
@@ -32,13 +32,13 @@ module Utils = {
 
   let stringToHex = input => {
     let hex = "0123456789abcdef"
-    input->Js.String2.split("")->Belt.Array.reduce("", (acc, curr) => {
+    input->Js.String2.split("")->Js.Array2.reduce((acc, curr) => {
       let charCode = curr->Js.String2.charCodeAt(0)->Belt.Int.fromFloat
 
       acc ++
       (hex->Js.String2.charAt(land(lsr(charCode, 4), 0x0F)) ++
       hex->Js.String2.charAt(land(charCode, 0x0F)))
-    })
+    }, "")
   }
 }
 
@@ -130,7 +130,7 @@ module Preprocess = {
 
     let va = ref(length * 8)
     for i in 1 to 15 {
-      let _ = bytes->Belt.Array.set(Belt.Array.length(bytes) - i, land(va.contents, 255))
+      let _ = bytes->Js.Array2.unsafe_set(Js.Array2.length(bytes) - i, land(va.contents, 255))
 
       va := asr(va.contents, 8)
     }
@@ -140,7 +140,7 @@ module Preprocess = {
 
 module Process = {
   let make = message => {
-    let chunks = asr(Belt.Array.length(message) + 8, 6)
+    let chunks = asr(Js.Array2.length(message) + 8, 6)
 
     let a = ref(-0x3efa6128l)
     let b = ref(0x367cd507l)
@@ -156,45 +156,39 @@ module Process = {
 
       for t in 0 to 15 {
         let result =
-          Belt.Array.get(message, i * 64 + 4 * t)
-          ->Belt.Option.getWithDefault(0)
+          Js.Array2.unsafe_get(message, i * 64 + 4 * t)
           ->Int32.of_int
           ->Int32.shift_left(24)
           ->Int32.logand(-0x1000000l)
           ->Int32.logor(
-            Belt.Array.get(message, i * 64 + 4 * t + 1)
-            ->Belt.Option.getWithDefault(0)
+            Js.Array2.unsafe_get(message, i * 64 + 4 * t + 1)
             ->Int32.of_int
             ->Int32.shift_left(16)
             ->Int32.logand(0x00FF0000l),
           )
           ->Int32.logor(
-            Belt.Array.get(message, i * 64 + 4 * t + 2)
-            ->Belt.Option.getWithDefault(0)
+            Js.Array2.unsafe_get(message, i * 64 + 4 * t + 2)
             ->Int32.of_int
             ->Int32.shift_left(8)
             ->Int32.logand(0xFF00l)
             ->Int32.logor(
-              Belt.Array.get(message, i * 64 + 4 * t + 3)
-              ->Belt.Option.getWithDefault(0)
-              ->Int32.of_int
-              ->Int32.logand(0xFFl),
+              Js.Array2.unsafe_get(message, i * 64 + 4 * t + 3)->Int32.of_int->Int32.logand(0xFFl),
             ),
           )
 
-        w->Belt.Array.set(t, result)->ignore
+        w->Js.Array2.unsafe_set(t, result)->ignore
       }
 
       for t in 16 to 63 {
-        let t2 = w->Belt.Array.get(t - 2)->Belt.Option.getWithDefault(0x00l)
-        let t7 = w->Belt.Array.get(t - 7)->Belt.Option.getWithDefault(0x00l)
-        let t15 = w->Belt.Array.get(t - 15)->Belt.Option.getWithDefault(0x00l)
-        let t16 = w->Belt.Array.get(t - 16)->Belt.Option.getWithDefault(0x00l)
+        let t2 = w->Js.Array2.unsafe_get(t - 2)
+        let t7 = w->Js.Array2.unsafe_get(t - 7)
+        let t15 = w->Js.Array2.unsafe_get(t - 15)
+        let t16 = w->Js.Array2.unsafe_get(t - 16)
 
         let result =
           Functions.sigma1(t2)->Int32.add(t7)->Int32.add(Functions.sigma0(t15))->Int32.add(t16)
 
-        w->Belt.Array.set(t, result)->ignore
+        w->Js.Array2.unsafe_set(t, result)->ignore
       }
 
       let originalA = a.contents
@@ -206,13 +200,13 @@ module Process = {
       let originalG = g.contents
       let originalH = h.contents
 
-      Constants.k->Belt.Array.forEachWithIndex((t, k) => {
+      Constants.k->Js.Array2.forEachi((k, t) => {
         let temp1 =
           h.contents
           ->Int32.add(Functions.sum1(e.contents))
           ->Int32.add(Functions.change(e.contents, f.contents, g.contents))
           ->Int32.add(k)
-          ->Int32.add(w->Belt.Array.get(t)->Belt.Option.getWithDefault(0x00l))
+          ->Int32.add(w->Js.Array2.unsafe_get(t))
 
         let temp2 = Int32.add(
           Functions.sum0(a.contents),
@@ -247,7 +241,7 @@ module Process = {
     ->Utils.append32(e.contents, 16)
     ->Utils.append32(f.contents, 20)
     ->Utils.append32(g.contents, 24)
-    ->Belt.Array.reduce("", (acc, curr) => acc ++ Js.String.fromCharCode(curr))
+    ->Js.Array2.reduce((acc, curr) => acc ++ Js.String.fromCharCode(curr), "")
     ->Utils.stringToHex
   }
 }

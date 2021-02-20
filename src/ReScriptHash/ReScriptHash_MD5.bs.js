@@ -2,7 +2,6 @@
 'use strict';
 
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
-var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 
 function rotl(x, n) {
   return (x << n) | (x >>> (64 - n | 0)) | 0;
@@ -10,7 +9,7 @@ function rotl(x, n) {
 
 function append(hash, value, offset) {
   for(var j = 0; j <= 3; ++j){
-    Belt_Array.set(hash, j + offset | 0, (value >>> (j << 3)) & 255);
+    hash[j + offset | 0] = (value >>> (j << 3)) & 255;
   }
   return hash;
 }
@@ -118,7 +117,7 @@ function pad(msg) {
         }));
   var va = (length << 3);
   for(var i = 0; i <= 7; ++i){
-    Belt_Array.set(bytes, i + (size - 8 | 0) | 0, va & 255);
+    bytes[i + (size - 8 | 0) | 0] = va & 255;
     va = (va >>> 8);
   }
   return bytes;
@@ -142,44 +141,44 @@ function make(message) {
   var w = Belt_Array.make(16, 0);
   for(var i = 0; i < chunks; ++i){
     for(var j = 0; j <= 63; ++j){
-      var result = (Belt_Option.getWithDefault(Belt_Array.get(message$1, (i << 6) + j | 0), 0) << 24) | (Belt_Option.getWithDefault(Belt_Array.get(w, (j >>> 2)), 0) >>> 8);
-      Belt_Array.set(w, (j >>> 2), result);
+      var result = (message$1[(i << 6) + j | 0] << 24) | (w[(j >>> 2)] >>> 8);
+      w[(j >>> 2)] = result;
     }
     var originalA = a.contents;
     var originalB = b.contents;
     var originalC = c.contents;
     var originalD = d.contents;
-    Belt_Array.forEachWithIndex(k, (function (j, k) {
-            var f = 0 <= j && j <= 15 ? b.contents & c.contents | (b.contents ^ -1) & d.contents : (
-                16 <= j && j <= 31 ? b.contents & d.contents | c.contents & (d.contents ^ -1) : (
-                    32 <= j && j <= 47 ? b.contents ^ c.contents ^ d.contents : c.contents ^ (b.contents | d.contents ^ -1)
-                  )
-              );
-            var g = 0 <= j && j <= 15 ? j : (
-                16 <= j && j <= 31 ? (Math.imul(5, j) + 1 | 0) % 16 : (
-                    32 <= j && j <= 47 ? (Math.imul(3, j) + 5 | 0) % 16 : Math.imul(7, j) % 16
-                  )
-              );
-            var temp = b.contents + rotl(((a.contents + f | 0) + Belt_Option.getWithDefault(Belt_Array.get(w, g), 0) | 0) + k | 0, Belt_Option.getWithDefault(Belt_Array.get(s, ((j >>> 4) << 2) | j & 3), 0)) | 0;
-            a.contents = d.contents;
-            d.contents = c.contents;
-            c.contents = b.contents;
-            b.contents = temp;
-            
-          }));
+    k.forEach(function (k, j) {
+          var f = 0 <= j && j <= 15 ? b.contents & c.contents | (b.contents ^ -1) & d.contents : (
+              16 <= j && j <= 31 ? b.contents & d.contents | c.contents & (d.contents ^ -1) : (
+                  32 <= j && j <= 47 ? b.contents ^ c.contents ^ d.contents : c.contents ^ (b.contents | d.contents ^ -1)
+                )
+            );
+          var g = 0 <= j && j <= 15 ? j : (
+              16 <= j && j <= 31 ? (Math.imul(5, j) + 1 | 0) % 16 : (
+                  32 <= j && j <= 47 ? (Math.imul(3, j) + 5 | 0) % 16 : Math.imul(7, j) % 16
+                )
+            );
+          var temp = b.contents + rotl(((a.contents + f | 0) + w[g] | 0) + k | 0, s[((j >>> 4) << 2) | j & 3]) | 0;
+          a.contents = d.contents;
+          d.contents = c.contents;
+          c.contents = b.contents;
+          b.contents = temp;
+          
+        });
     a.contents = originalA + a.contents | 0;
     b.contents = originalB + b.contents | 0;
     c.contents = originalC + c.contents | 0;
     d.contents = originalD + d.contents | 0;
   }
-  var input = Belt_Array.reduce(append(append(append(append(Belt_Array.make(16, 0), a.contents, 0), b.contents, 4), c.contents, 8), d.contents, 12), "", (function (acc, curr) {
+  var input = append(append(append(append(Belt_Array.make(16, 0), a.contents, 0), b.contents, 4), c.contents, 8), d.contents, 12).reduce((function (acc, curr) {
           return acc + String.fromCharCode(curr);
-        }));
+        }), "");
   var hex = "0123456789abcdef";
-  return Belt_Array.reduce(input.split(""), "", (function (acc, curr) {
+  return input.split("").reduce((function (acc, curr) {
                 var charCode = curr.charCodeAt(0) | 0;
                 return acc + (hex.charAt((charCode >>> 4) & 15) + hex.charAt(charCode & 15));
-              }));
+              }), "");
 }
 
 exports.make = make;

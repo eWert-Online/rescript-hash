@@ -1,7 +1,8 @@
 module Functions = {
   let rotr = (x, n) => Int64.logor(Int64.shift_right_logical(x, n), Int64.shift_left(x, 64 - n))
 
-  let change = (x, y, z) => Int64.logand(x, y)->Int64.logxor(Int64.logand(Int64.lognot(x), z))
+  let change = (x, y, z) =>
+    Int64.logand(x, y)->Int64.logxor(Int64.logand(Int64.logxor(x, Int64.neg(0x01L)), z))
 
   let majority = (x, y, z) =>
     Int64.logand(x, y)->Int64.logxor(Int64.logand(x, z))->Int64.logxor(Int64.logand(y, z))
@@ -21,7 +22,7 @@ module Utils = {
   let append64 = (hash, value, offset) => {
     for j in 0 to 7 {
       hash
-      ->Belt.Array.set(
+      ->Js.Array2.unsafe_set(
         j + offset,
         Int64.shift_right_logical(value, 56 - j * 8)->Int64.logand(0xFFL)->Int64.to_int,
       )
@@ -32,13 +33,13 @@ module Utils = {
 
   let stringToHex = input => {
     let hex = "0123456789abcdef"
-    input->Js.String2.split("")->Belt.Array.reduce("", (acc, curr) => {
+    input->Js.String2.split("")->Js.Array2.reduce((acc, curr) => {
       let charCode = curr->Js.String2.charCodeAt(0)->Belt.Int.fromFloat
 
       acc ++
       (hex->Js.String2.charAt(land(lsr(charCode, 4), 0x0F)) ++
       hex->Js.String2.charAt(land(charCode, 0x0F)))
-    })
+    }, "")
   }
 }
 
@@ -146,7 +147,7 @@ module Preprocess = {
 
     let va = ref(length * 8)
     for i in 1 to 15 {
-      let _ = bytes->Belt.Array.set(Belt.Array.length(bytes) - i, land(va.contents, 255))
+      bytes->Js.Array2.unsafe_set(Js.Array2.length(bytes) - i, land(va.contents, 255))
 
       va := asr(va.contents, 8)
     }
@@ -156,7 +157,7 @@ module Preprocess = {
 
 module Process = {
   let make = message => {
-    let chunks = Belt.Array.length(message) / 128
+    let chunks = Js.Array2.length(message) / 128
 
     let a = ref(-0x344462a23efa6128L)
     let b = ref(0x629a292a367cd507L)
@@ -173,27 +174,24 @@ module Process = {
       for t in 0 to 15 {
         for j in 0 to 7 {
           let result =
-            Int64.shift_left(w->Belt.Array.get(t)->Belt.Option.getWithDefault(0x00L), 8)->Int64.add(
-              land(
-                message->Belt.Array.get(j + (i * 128 + 8 * t))->Belt.Option.getWithDefault(0x00),
-                0xff,
-              )->Int64.of_int,
+            Int64.shift_left(w->Js.Array2.unsafe_get(t), 8)->Int64.add(
+              land(message->Js.Array2.unsafe_get(j + (i * 128 + 8 * t)), 0xff)->Int64.of_int,
             )
 
-          w->Belt.Array.set(t, result)->ignore
+          w->Js.Array2.unsafe_set(t, result)->ignore
         }
       }
 
       for t in 16 to 79 {
-        let t2 = w->Belt.Array.get(t - 2)->Belt.Option.getWithDefault(0x00L)
-        let t7 = w->Belt.Array.get(t - 7)->Belt.Option.getWithDefault(0x00L)
-        let t15 = w->Belt.Array.get(t - 15)->Belt.Option.getWithDefault(0x00L)
-        let t16 = w->Belt.Array.get(t - 16)->Belt.Option.getWithDefault(0x00L)
+        let t2 = w->Js.Array2.unsafe_get(t - 2)
+        let t7 = w->Js.Array2.unsafe_get(t - 7)
+        let t15 = w->Js.Array2.unsafe_get(t - 15)
+        let t16 = w->Js.Array2.unsafe_get(t - 16)
 
         let result =
           Functions.sigma1(t2)->Int64.add(t7)->Int64.add(Functions.sigma0(t15))->Int64.add(t16)
 
-        w->Belt.Array.set(t, result)->ignore
+        w->Js.Array2.unsafe_set(t, result)->ignore
       }
 
       let originalA = a.contents
@@ -205,13 +203,13 @@ module Process = {
       let originalG = g.contents
       let originalH = h.contents
 
-      Constants.k->Belt.Array.forEachWithIndex((t, k) => {
+      Constants.k->Js.Array2.forEachi((k, t) => {
         let temp1 =
           h.contents
           ->Int64.add(Functions.sum1(e.contents))
           ->Int64.add(Functions.change(e.contents, f.contents, g.contents))
           ->Int64.add(k)
-          ->Int64.add(w->Belt.Array.get(t)->Belt.Option.getWithDefault(0x00L))
+          ->Int64.add(w->Js.Array2.unsafe_get(t))
 
         let temp2 = Int64.add(
           Functions.sum0(a.contents),
@@ -245,7 +243,7 @@ module Process = {
     ->Utils.append64(d.contents, 24)
     ->Utils.append64(e.contents, 32)
     ->Utils.append64(f.contents, 40)
-    ->Belt.Array.reduce("", (acc, curr) => acc ++ Js.String.fromCharCode(curr))
+    ->Js.Array2.reduce((acc, curr) => acc ++ Js.String.fromCharCode(curr), "")
     ->Utils.stringToHex
   }
 }

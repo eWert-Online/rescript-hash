@@ -3,7 +3,6 @@
 
 var Int32 = require("bs-platform/lib/js/int32.js");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
-var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 
 function rotl(x, n) {
   return (x << n) | (x >>> (64 - n | 0)) | 0;
@@ -29,7 +28,7 @@ function f(t, x, y, z) {
 
 function append32(hash, value, offset) {
   for(var j = 0; j <= 3; ++j){
-    Belt_Array.set(hash, j + offset | 0, (value >>> (24 - (j << 3) | 0)) & 255);
+    hash[j + offset | 0] = (value >>> (24 - (j << 3) | 0)) & 255;
   }
   return hash;
 }
@@ -134,7 +133,7 @@ function pad(msg) {
         }));
   var va = (length << 3);
   for(var i = 1; i <= 15; ++i){
-    Belt_Array.set(bytes, bytes.length - i | 0, va & 255);
+    bytes[bytes.length - i | 0] = va & 255;
     va = (va >> 8);
   }
   return bytes;
@@ -161,25 +160,25 @@ function make(message) {
   for(var i = 0; i < chunks; ++i){
     var w = Belt_Array.make(80, 0);
     for(var t = 0; t <= 15; ++t){
-      var result = (Belt_Option.getWithDefault(Belt_Array.get(message$1, (i << 6) + (t << 2) | 0), 0) << 24) & -16777216 | (Belt_Option.getWithDefault(Belt_Array.get(message$1, ((i << 6) + (t << 2) | 0) + 1 | 0), 0) << 16) & 16711680 | (Belt_Option.getWithDefault(Belt_Array.get(message$1, ((i << 6) + (t << 2) | 0) + 2 | 0), 0) << 8) & 65280 | Belt_Option.getWithDefault(Belt_Array.get(message$1, ((i << 6) + (t << 2) | 0) + 3 | 0), 0) & 255;
-      Belt_Array.set(w, t, result);
+      var result = (message$1[(i << 6) + (t << 2) | 0] << 24) & -16777216 | (message$1[((i << 6) + (t << 2) | 0) + 1 | 0] << 16) & 16711680 | (message$1[((i << 6) + (t << 2) | 0) + 2 | 0] << 8) & 65280 | message$1[((i << 6) + (t << 2) | 0) + 3 | 0] & 255;
+      w[t] = result;
     }
     for(var t$1 = 16; t$1 <= 79; ++t$1){
-      var t3 = Belt_Option.getWithDefault(Belt_Array.get(w, t$1 - 3 | 0), 0);
-      var t8 = Belt_Option.getWithDefault(Belt_Array.get(w, t$1 - 8 | 0), 0);
-      var t14 = Belt_Option.getWithDefault(Belt_Array.get(w, t$1 - 14 | 0), 0);
-      var t16 = Belt_Option.getWithDefault(Belt_Array.get(w, t$1 - 16 | 0), 0);
+      var t3 = w[t$1 - 3 | 0];
+      var t8 = w[t$1 - 8 | 0];
+      var t14 = w[t$1 - 14 | 0];
+      var t16 = w[t$1 - 16 | 0];
       var result$1 = rotl(t3 ^ t8 ^ t14 ^ t16, 1);
-      Belt_Array.set(w, t$1, result$1);
+      w[t$1] = result$1;
     }
     var originalA = a.contents;
     var originalB = b.contents;
     var originalC = c.contents;
     var originalD = d.contents;
     var originalE = e.contents;
-    Belt_Array.forEachWithIndex(k, (function(w){
-        return function (t, k) {
-          var temp = (((rotl(a.contents, 5) + f(t, b.contents, c.contents, d.contents) | 0) + e.contents | 0) + k | 0) + Belt_Option.getWithDefault(Belt_Array.get(w, t), 0) | 0;
+    k.forEach((function(w){
+        return function (k, t) {
+          var temp = (((rotl(a.contents, 5) + f(t, b.contents, c.contents, d.contents) | 0) + e.contents | 0) + k | 0) + w[t] | 0;
           e.contents = d.contents;
           d.contents = c.contents;
           c.contents = rotl(b.contents, 30);
@@ -194,14 +193,14 @@ function make(message) {
     d.contents = originalD + d.contents | 0;
     e.contents = originalE + e.contents | 0;
   }
-  var input = Belt_Array.reduce(append32(append32(append32(append32(append32(Belt_Array.make(20, 0), a.contents, 0), b.contents, 4), c.contents, 8), d.contents, 12), e.contents, 16), "", (function (acc, curr) {
+  var input = append32(append32(append32(append32(append32(Belt_Array.make(20, 0), a.contents, 0), b.contents, 4), c.contents, 8), d.contents, 12), e.contents, 16).reduce((function (acc, curr) {
           return acc + String.fromCharCode(curr);
-        }));
+        }), "");
   var hex = "0123456789abcdef";
-  return Belt_Array.reduce(input.split(""), "", (function (acc, curr) {
+  return input.split("").reduce((function (acc, curr) {
                 var charCode = curr.charCodeAt(0) | 0;
                 return acc + (hex.charAt((charCode >>> 4) & 15) + hex.charAt(charCode & 15));
-              }));
+              }), "");
 }
 
 exports.make = make;

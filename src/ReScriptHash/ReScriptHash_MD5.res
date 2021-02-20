@@ -5,20 +5,20 @@ module Functions = {
 module Utils = {
   let append = (hash, value, offset) => {
     for j in 0 to 3 {
-      hash->Belt.Array.set(j + offset, land(lsr(value, j * 8), 0xFF))->ignore
+      hash->Js.Array2.unsafe_set(j + offset, land(lsr(value, j * 8), 0xFF))->ignore
     }
     hash
   }
 
   let stringToHex = input => {
     let hex = "0123456789abcdef"
-    input->Js.String2.split("")->Belt.Array.reduce("", (acc, curr) => {
+    input->Js.String2.split("")->Js.Array2.reduce((acc, curr) => {
       let charCode = curr->Js.String2.charCodeAt(0)->Belt.Int.fromFloat
 
       acc ++
       (hex->Js.String2.charAt(land(lsr(charCode, 4), 0x0F)) ++
       hex->Js.String2.charAt(land(charCode, 0x0F)))
-    })
+    }, "")
   }
 }
 
@@ -112,7 +112,7 @@ module Preprocess = {
 
     let va = ref(length * 8)
     for i in 0 to 7 {
-      bytes->Belt.Array.set(i + (size.contents - 8), land(va.contents, 255))->ignore
+      bytes->Js.Array2.unsafe_set(i + (size.contents - 8), land(va.contents, 255))->ignore
       va := lsr(va.contents, 8)
     }
 
@@ -122,7 +122,7 @@ module Preprocess = {
 
 module Process = {
   let make = message => {
-    let chunks = asr(Belt.Array.length(message) + 8, 6)
+    let chunks = asr(Js.Array2.length(message) + 8, 6)
 
     let a = ref(0x67452301)
     let b = ref(0xEFCDAB89)
@@ -134,11 +134,11 @@ module Process = {
     for i in 0 to chunks - 1 {
       for j in 0 to 63 {
         let result = lor(
-          lsl(Belt.Array.get(message, lsl(i, 6) + j)->Belt.Option.getWithDefault(0), 24),
-          lsr(Belt.Array.get(w, lsr(j, 2))->Belt.Option.getWithDefault(0), 8),
+          lsl(Js.Array2.unsafe_get(message, lsl(i, 6) + j), 24),
+          lsr(Js.Array2.unsafe_get(w, lsr(j, 2)), 8),
         )
 
-        w->Belt.Array.set(lsr(j, 2), result)->ignore
+        w->Js.Array2.unsafe_set(lsr(j, 2), result)->ignore
       }
 
       let originalA = a.contents
@@ -146,7 +146,7 @@ module Process = {
       let originalC = c.contents
       let originalD = d.contents
 
-      Constants.k->Belt.Array.forEachWithIndex((j, k) => {
+      Constants.k->Js.Array2.forEachi((k, j) => {
         let f = if 0 <= j && j <= 15 {
           lor(land(b.contents, c.contents), land(lxor(b.contents, -1), d.contents))
         } else if 16 <= j && j <= 31 {
@@ -170,10 +170,8 @@ module Process = {
         let temp =
           b.contents +
           Functions.rotl(
-            a.contents + f + w->Belt.Array.get(g)->Belt.Option.getWithDefault(0) + k,
-            Constants.s
-            ->Belt.Array.get(lor(lsl(lsr(j, 4), 2), land(j, 3)))
-            ->Belt.Option.getWithDefault(0),
+            a.contents + f + w->Js.Array2.unsafe_get(g) + k,
+            Constants.s->Js.Array2.unsafe_get(lor(lsl(lsr(j, 4), 2), land(j, 3))),
           )
 
         a := d.contents
@@ -193,7 +191,7 @@ module Process = {
     ->Utils.append(b.contents, 4)
     ->Utils.append(c.contents, 8)
     ->Utils.append(d.contents, 12)
-    ->Belt.Array.reduce("", (acc, curr) => acc ++ Js.String.fromCharCode(curr))
+    ->Js.Array2.reduce((acc, curr) => acc ++ Js.String.fromCharCode(curr), "")
     ->Utils.stringToHex
   }
 }

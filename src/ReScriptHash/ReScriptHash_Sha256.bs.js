@@ -3,7 +3,6 @@
 
 var Int32 = require("bs-platform/lib/js/int32.js");
 var Belt_Array = require("bs-platform/lib/js/belt_Array.js");
-var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 
 function rotr(x, n) {
   return (x >>> n) | 0 | (x << (64 - n | 0));
@@ -35,7 +34,7 @@ function sigma1(x) {
 
 function append32(hash, value, offset) {
   for(var j = 0; j <= 3; ++j){
-    Belt_Array.set(hash, j + offset | 0, (value >>> (24 - (j << 3) | 0)) & 255);
+    hash[j + offset | 0] = (value >>> (24 - (j << 3) | 0)) & 255;
   }
   return hash;
 }
@@ -124,7 +123,7 @@ function pad(msg) {
         }));
   var va = (length << 3);
   for(var i = 1; i <= 15; ++i){
-    Belt_Array.set(bytes, bytes.length - i | 0, va & 255);
+    bytes[bytes.length - i | 0] = va & 255;
     va = (va >> 8);
   }
   return bytes;
@@ -161,15 +160,15 @@ function make(message) {
     var w = Belt_Array.make(64, 0);
     for(var t = 0; t <= 15; ++t){
       var result = (message$1[(i << 6) + (t << 2) | 0] << 24) & -16777216 | (message$1[((i << 6) + (t << 2) | 0) + 1 | 0] << 16) & 16711680 | (message$1[((i << 6) + (t << 2) | 0) + 2 | 0] << 8) & 65280 | message$1[((i << 6) + (t << 2) | 0) + 3 | 0] & 255;
-      Belt_Array.set(w, t, result);
+      w[t] = result;
     }
     for(var t$1 = 16; t$1 <= 63; ++t$1){
-      var t2 = Belt_Option.getWithDefault(Belt_Array.get(w, t$1 - 2 | 0), 0);
-      var t7 = Belt_Option.getWithDefault(Belt_Array.get(w, t$1 - 7 | 0), 0);
-      var t15 = Belt_Option.getWithDefault(Belt_Array.get(w, t$1 - 15 | 0), 0);
-      var t16 = Belt_Option.getWithDefault(Belt_Array.get(w, t$1 - 16 | 0), 0);
+      var t2 = w[t$1 - 2 | 0];
+      var t7 = w[t$1 - 7 | 0];
+      var t15 = w[t$1 - 15 | 0];
+      var t16 = w[t$1 - 16 | 0];
       var result$1 = ((sigma1(t2) + t7 | 0) + sigma0(t15) | 0) + t16 | 0;
-      Belt_Array.set(w, t$1, result$1);
+      w[t$1] = result$1;
     }
     var originalA = a.contents;
     var originalB = b.contents;
@@ -179,9 +178,9 @@ function make(message) {
     var originalF = f.contents;
     var originalG = g.contents;
     var originalH = h.contents;
-    Belt_Array.forEachWithIndex(k, (function(w){
-        return function (t, k) {
-          var temp1 = (((h.contents + sum1(e.contents) | 0) + change(e.contents, f.contents, g.contents) | 0) + k | 0) + Belt_Option.getWithDefault(Belt_Array.get(w, t), 0) | 0;
+    k.forEach((function(w){
+        return function (k, t) {
+          var temp1 = (((h.contents + sum1(e.contents) | 0) + change(e.contents, f.contents, g.contents) | 0) + k | 0) + w[t] | 0;
           var temp2 = sum0(a.contents) + majority(a.contents, b.contents, c.contents) | 0;
           h.contents = g.contents;
           g.contents = f.contents;
@@ -203,14 +202,14 @@ function make(message) {
     g.contents = originalG + g.contents | 0;
     h.contents = originalH + h.contents | 0;
   }
-  var input = Belt_Array.reduce(append32(append32(append32(append32(append32(append32(append32(append32(Belt_Array.make(32, 0), a.contents, 0), b.contents, 4), c.contents, 8), d.contents, 12), e.contents, 16), f.contents, 20), g.contents, 24), h.contents, 28), "", (function (acc, curr) {
+  var input = append32(append32(append32(append32(append32(append32(append32(append32(Belt_Array.make(32, 0), a.contents, 0), b.contents, 4), c.contents, 8), d.contents, 12), e.contents, 16), f.contents, 20), g.contents, 24), h.contents, 28).reduce((function (acc, curr) {
           return acc + String.fromCharCode(curr);
-        }));
+        }), "");
   var hex = "0123456789abcdef";
-  return Belt_Array.reduce(input.split(""), "", (function (acc, curr) {
+  return input.split("").reduce((function (acc, curr) {
                 var charCode = curr.charCodeAt(0) | 0;
                 return acc + (hex.charAt((charCode >>> 4) & 15) + hex.charAt(charCode & 15));
-              }));
+              }), "");
 }
 
 exports.make = make;
