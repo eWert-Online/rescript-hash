@@ -40,6 +40,7 @@ Then add `rescript-hash` as a dependency to `bsconfig.json`:
 
 ```reason
 let hash = ReScriptHash.MD5.make("unicorn");
+let hash = ReScriptHash.MD5.makeU(. "unicorn");
 /* 1abcb33beeb811dca15f0ac3e47b88d9 */
 ```
 
@@ -47,6 +48,7 @@ let hash = ReScriptHash.MD5.make("unicorn");
 
 ```reason
 let hash = ReScriptHash.Sha1.make("unicorn");
+let hash = ReScriptHash.Sha1.makeU(. "unicorn");
 /* 84de6753b298abd027fcd1d790eade2413eafb5a */
 ```
 
@@ -54,6 +56,7 @@ let hash = ReScriptHash.Sha1.make("unicorn");
 
 ```reason
 let hash = ReScriptHash.Sha224.make("unicorn");
+let hash = ReScriptHash.Sha224.makeU(. "unicorn");
 /* 983d515094574856a57db3a13741f0a65509bb640bfa551e78fa01d9 */
 ```
 
@@ -61,6 +64,7 @@ let hash = ReScriptHash.Sha224.make("unicorn");
 
 ```reason
 let hash = ReScriptHash.Sha256.make("unicorn");
+let hash = ReScriptHash.Sha256.makeU(. "unicorn");
 /* c6cb50e7eea0df1fd3eaf52ada2358f5423afd7c0b5ee2395231a9b3208ffcaf */
 ```
 
@@ -68,6 +72,7 @@ let hash = ReScriptHash.Sha256.make("unicorn");
 
 ```reason
 let hash = ReScriptHash.Sha384.make("unicorn");
+let hash = ReScriptHash.Sha384.makeU(. "unicorn");
 /* de41efa2be0844783ea107630a79246fb1f7b3ab97b35c5e4b70130804f876f64b645c1064a775507a7ac3be457539f2 */
 ```
 
@@ -75,5 +80,6 @@ let hash = ReScriptHash.Sha384.make("unicorn");
 
 ```reason
 let hash = ReScriptHash.Sha512.make("unicorn");
+let hash = ReScriptHash.Sha512.makeU(. "unicorn");
 /* e233b19aabc7d5e53826fb734d1222f1f0444c3a3fc67ff4af370a66e7cadd2cb24009f1bc86f0bed12ca5fcb226145ad10fc5f650f6ef0959f8aadc5a594b27 */
 ```
